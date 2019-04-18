@@ -10,11 +10,22 @@ using System.Windows.Forms;
 
 namespace apCalculadora
 {
-    public partial class Form1 : Form
+    public partial class frmCalculadora : Form
     {
-        public Form1()
+        public frmCalculadora()
         {
             InitializeComponent();
+            lblPosFixa.AutoSize = true;
+        }
+
+        private void frmCalculadora_Resize(object sender, EventArgs e)
+        {
+            lblPosFixa.MaximumSize = new Size(Width, 0);
+        }
+
+        private void btnIgual_Click(object sender, EventArgs e)
+        {
+            //
         }
     }
 }
