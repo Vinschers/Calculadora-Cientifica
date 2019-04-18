@@ -80,6 +80,7 @@
             // 
             // btnSqrt
             // 
+            this.btnSqrt.Font = new System.Drawing.Font("Arial", 20F);
             this.btnSqrt.Location = new System.Drawing.Point(12, 136);
             this.btnSqrt.Name = "btnSqrt";
             this.btnSqrt.Size = new System.Drawing.Size(100, 100);
@@ -90,6 +91,7 @@
             // 
             // btnCE
             // 
+            this.btnCE.Font = new System.Drawing.Font("Arial", 20F);
             this.btnCE.Location = new System.Drawing.Point(118, 136);
             this.btnCE.Name = "btnCE";
             this.btnCE.Size = new System.Drawing.Size(100, 100);
@@ -100,6 +102,7 @@
             // 
             // btnC
             // 
+            this.btnC.Font = new System.Drawing.Font("Arial", 20F);
             this.btnC.Location = new System.Drawing.Point(224, 136);
             this.btnC.Name = "btnC";
             this.btnC.Size = new System.Drawing.Size(100, 100);
@@ -111,7 +114,7 @@
             // btnApagar
             // 
             this.btnApagar.Enabled = false;
-            this.btnApagar.Font = new System.Drawing.Font("Arial", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnApagar.Font = new System.Drawing.Font("Arial", 25F);
             this.btnApagar.Location = new System.Drawing.Point(330, 136);
             this.btnApagar.Name = "btnApagar";
             this.btnApagar.Size = new System.Drawing.Size(100, 100);
@@ -123,6 +126,7 @@
             // btnDividir
             // 
             this.btnDividir.Enabled = false;
+            this.btnDividir.Font = new System.Drawing.Font("Arial", 20F);
             this.btnDividir.Location = new System.Drawing.Point(436, 136);
             this.btnDividir.Name = "btnDividir";
             this.btnDividir.Size = new System.Drawing.Size(100, 100);
@@ -133,6 +137,7 @@
             // 
             // btnLog
             // 
+            this.btnLog.Font = new System.Drawing.Font("Arial", 20F);
             this.btnLog.Location = new System.Drawing.Point(12, 242);
             this.btnLog.Name = "btnLog";
             this.btnLog.Size = new System.Drawing.Size(100, 100);
@@ -143,6 +148,7 @@
             // 
             // btn7
             // 
+            this.btn7.Font = new System.Drawing.Font("Arial", 20F);
             this.btn7.Location = new System.Drawing.Point(118, 242);
             this.btn7.Name = "btn7";
             this.btn7.Size = new System.Drawing.Size(100, 100);
@@ -153,6 +159,7 @@
             // 
             // btn8
             // 
+            this.btn8.Font = new System.Drawing.Font("Arial", 20F);
             this.btn8.Location = new System.Drawing.Point(224, 242);
             this.btn8.Name = "btn8";
             this.btn8.Size = new System.Drawing.Size(100, 100);
@@ -163,6 +170,7 @@
             // 
             // btn9
             // 
+            this.btn9.Font = new System.Drawing.Font("Arial", 20F);
             this.btn9.Location = new System.Drawing.Point(330, 242);
             this.btn9.Name = "btn9";
             this.btn9.Size = new System.Drawing.Size(100, 100);
@@ -174,6 +182,7 @@
             // btnMultiplicar
             // 
             this.btnMultiplicar.Enabled = false;
+            this.btnMultiplicar.Font = new System.Drawing.Font("Arial", 20F);
             this.btnMultiplicar.Location = new System.Drawing.Point(436, 242);
             this.btnMultiplicar.Name = "btnMultiplicar";
             this.btnMultiplicar.Size = new System.Drawing.Size(100, 100);
@@ -185,6 +194,7 @@
             // btnFatorial
             // 
             this.btnFatorial.Enabled = false;
+            this.btnFatorial.Font = new System.Drawing.Font("Arial", 20F);
             this.btnFatorial.Location = new System.Drawing.Point(12, 348);
             this.btnFatorial.Name = "btnFatorial";
             this.btnFatorial.Size = new System.Drawing.Size(100, 100);
@@ -195,6 +205,7 @@
             // 
             // btn4
             // 
+            this.btn4.Font = new System.Drawing.Font("Arial", 20F);
             this.btn4.Location = new System.Drawing.Point(118, 348);
             this.btn4.Name = "btn4";
             this.btn4.Size = new System.Drawing.Size(100, 100);
@@ -205,6 +216,7 @@
             // 
             // btn5
             // 
+            this.btn5.Font = new System.Drawing.Font("Arial", 20F);
             this.btn5.Location = new System.Drawing.Point(224, 348);
             this.btn5.Name = "btn5";
             this.btn5.Size = new System.Drawing.Size(100, 100);
@@ -215,6 +227,7 @@
             // 
             // btn6
             // 
+            this.btn6.Font = new System.Drawing.Font("Arial", 20F);
             this.btn6.Location = new System.Drawing.Point(330, 348);
             this.btn6.Name = "btn6";
             this.btn6.Size = new System.Drawing.Size(100, 100);
@@ -225,6 +238,7 @@
             // 
             // btnMenos
             // 
+            this.btnMenos.Font = new System.Drawing.Font("Arial", 20F);
             this.btnMenos.Location = new System.Drawing.Point(436, 348);
             this.btnMenos.Name = "btnMenos";
             this.btnMenos.Size = new System.Drawing.Size(100, 100);
@@ -236,6 +250,7 @@
             // btnElevado
             // 
             this.btnElevado.Enabled = false;
+            this.btnElevado.Font = new System.Drawing.Font("Arial", 20F);
             this.btnElevado.Location = new System.Drawing.Point(12, 454);
             this.btnElevado.Name = "btnElevado";
             this.btnElevado.Size = new System.Drawing.Size(100, 100);
@@ -246,6 +261,7 @@
             // 
             // btn1
             // 
+            this.btn1.Font = new System.Drawing.Font("Arial", 20F);
             this.btn1.Location = new System.Drawing.Point(118, 454);
             this.btn1.Name = "btn1";
             this.btn1.Size = new System.Drawing.Size(100, 100);
@@ -256,6 +272,7 @@
             // 
             // btn2
             // 
+            this.btn2.Font = new System.Drawing.Font("Arial", 20F);
             this.btn2.Location = new System.Drawing.Point(224, 454);
             this.btn2.Name = "btn2";
             this.btn2.Size = new System.Drawing.Size(100, 100);
@@ -266,6 +283,7 @@
             // 
             // btn3
             // 
+            this.btn3.Font = new System.Drawing.Font("Arial", 20F);
             this.btn3.Location = new System.Drawing.Point(330, 454);
             this.btn3.Name = "btn3";
             this.btn3.Size = new System.Drawing.Size(100, 100);
@@ -277,6 +295,7 @@
             // btnMais
             // 
             this.btnMais.Enabled = false;
+            this.btnMais.Font = new System.Drawing.Font("Arial", 20F);
             this.btnMais.Location = new System.Drawing.Point(436, 454);
             this.btnMais.Name = "btnMais";
             this.btnMais.Size = new System.Drawing.Size(100, 100);
@@ -287,6 +306,7 @@
             // 
             // btnAbreParenteses
             // 
+            this.btnAbreParenteses.Font = new System.Drawing.Font("Arial", 20F);
             this.btnAbreParenteses.Location = new System.Drawing.Point(12, 560);
             this.btnAbreParenteses.Name = "btnAbreParenteses";
             this.btnAbreParenteses.Size = new System.Drawing.Size(100, 100);
@@ -298,6 +318,7 @@
             // btnFechaParenteses
             // 
             this.btnFechaParenteses.Enabled = false;
+            this.btnFechaParenteses.Font = new System.Drawing.Font("Arial", 20F);
             this.btnFechaParenteses.Location = new System.Drawing.Point(118, 560);
             this.btnFechaParenteses.Name = "btnFechaParenteses";
             this.btnFechaParenteses.Size = new System.Drawing.Size(100, 100);
@@ -308,6 +329,7 @@
             // 
             // btn0
             // 
+            this.btn0.Font = new System.Drawing.Font("Arial", 20F);
             this.btn0.Location = new System.Drawing.Point(224, 560);
             this.btn0.Name = "btn0";
             this.btn0.Size = new System.Drawing.Size(100, 100);
@@ -318,6 +340,7 @@
             // 
             // btnDecimal
             // 
+            this.btnDecimal.Font = new System.Drawing.Font("Arial", 20F);
             this.btnDecimal.Location = new System.Drawing.Point(330, 560);
             this.btnDecimal.Name = "btnDecimal";
             this.btnDecimal.Size = new System.Drawing.Size(100, 100);
@@ -328,6 +351,7 @@
             // 
             // btnIgual
             // 
+            this.btnIgual.Font = new System.Drawing.Font("Arial", 20F);
             this.btnIgual.Location = new System.Drawing.Point(436, 560);
             this.btnIgual.Name = "btnIgual";
             this.btnIgual.Size = new System.Drawing.Size(100, 100);
@@ -370,6 +394,7 @@
             this.Controls.Add(this.txtVisor);
             this.Font = new System.Drawing.Font("Arial", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.MinimumSize = new System.Drawing.Size(300, 400);
             this.Name = "frmCalculadora";
             this.Text = "Calculadora";
             this.Resize += new System.EventHandler(this.frmCalculadora_Resize);
