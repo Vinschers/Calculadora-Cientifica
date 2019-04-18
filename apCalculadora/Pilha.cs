@@ -1,6 +1,6 @@
 ﻿using System;
 
-public class Pilha<Dado> : IStack<Dado>
+public class Pilha<Dado> : IStack<Dado> where Dado : IComparable<Dado>
 {
     Lista<Dado> lista;
     public Pilha()

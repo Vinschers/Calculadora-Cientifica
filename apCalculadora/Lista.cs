@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
-public class Lista<Dado>
+public class Lista<Dado> where Dado : IComparable<Dado>
 {
     public class NoLista<X>
     {

@@ -1,5 +1,5 @@
 ﻿using System;
-class Fila<Dado> : IQueue<Dado>
+class Fila<Dado> : IQueue<Dado> where Dado : IComparable<Dado>
 {
     Lista<Dado> lista;
     public Fila()
