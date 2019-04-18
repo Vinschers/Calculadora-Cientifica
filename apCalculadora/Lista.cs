@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Windows.Forms;
-public class Lista<Dado> where Dado : IComparable<Dado>
+public class Lista<Dado>
 {
-    public class NoLista<X> where X : IComparable<Dado>
+    public class NoLista<X>
     {
         private X info; //conteúdo do nó
         private NoLista<X> prox; //contém o ponteiro do procimo nó

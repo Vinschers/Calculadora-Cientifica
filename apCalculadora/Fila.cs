@@ -1,16 +1,21 @@
 ﻿using System;
-class Fila<Dado> : Lista<Dado>, IQueue<Dado> where Dado : IComparable<Dado>, IGravarEmArquivo
+class Fila<Dado> : IQueue<Dado>
 {
+    Lista<Dado> lista;
+    public Fila()
+    {
+        lista = new Lista<Dado>();
+    }
     public void Enfileirar(Dado elemento)
     {
-        base.InserirAposFim(elemento);
+        lista.InserirAposFim(elemento);
     }
     public Dado Retirar()
     {
         if (!EstaVazia())
         {
-            Dado elemento = base.primeiro.Info;
-            base.Remove(elemento);
+            Dado elemento = lista.Primeiro;
+            lista.Remove(elemento);
             return elemento;
         }
         throw new FilaVaziaException("Fila vazia");
@@ -19,8 +24,7 @@ class Fila<Dado> : Lista<Dado>, IQueue<Dado> where Dado : IComparable<Dado>, IGr
     {
         if (EstaVazia())
             throw new FilaVaziaException("Fila vazia");
-        Dado o = base.primeiro.Info;
-        return o;
+        return lista.Primeiro;
     }
     public Dado Fim
     {
@@ -29,20 +33,19 @@ class Fila<Dado> : Lista<Dado>, IQueue<Dado> where Dado : IComparable<Dado>, IGr
             if (EstaVazia())
                 throw new FilaVaziaException("Fila vazia");
 
-            Dado o = base.ultimo.Info;
-            return o;
+            return lista.Ultimo;
         }
     }
     public int Tamanho()
     {
-        return base.Contar;
+        return lista.Contar;
     }
-    public new bool EstaVazia()
+    public bool EstaVazia()
     {
-        return base.EstaVazia;
+        return lista.EstaVazia;
     }
-    public new Dado[] ToArray()
+    public Dado[] ToArray()
     {
-        return base.ToArray();
+        return lista.ToArray();
     }
 }

@@ -74,9 +74,8 @@
             this.lblPosFixa.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblPosFixa.Location = new System.Drawing.Point(-3, 91);
             this.lblPosFixa.Name = "lblPosFixa";
-            this.lblPosFixa.Size = new System.Drawing.Size(206, 16);
+            this.lblPosFixa.Size = new System.Drawing.Size(0, 16);
             this.lblPosFixa.TabIndex = 1;
-            this.lblPosFixa.Text = "Operação em sequência pós-fixa: ";
             // 
             // btnSqrt
             // 

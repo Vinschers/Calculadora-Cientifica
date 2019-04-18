@@ -1,13 +1,15 @@
 ﻿using System;
 
-public class Pilha<Dado> : Lista<Dado>, IStack<Dado> where Dado : IComparable<Dado>
+public class Pilha<Dado> : IStack<Dado>
 {
-    public Pilha() : base()
+    Lista<Dado> lista;
+    public Pilha()
     {
+        lista = new Lista<Dado>();
     }
     public void Empilhar(Dado o)
     {
-        InserirAntesDoInicio(o);
+        lista.InserirAntesDoInicio(o);
     }
     public Dado Topo
     {
@@ -15,23 +17,32 @@ public class Pilha<Dado> : Lista<Dado>, IStack<Dado> where Dado : IComparable<Da
         {
             if (EstaVazia())
                 throw new PilhaVaziaException("Underflow da pilha");
-            return primeiro.Info;
+            return lista.Primeiro;
+        }
+    }
+    public Dado Base
+    {
+        get
+        {
+            if (EstaVazia())
+                throw new PilhaVaziaException("Underflow da pilha");
+            return lista.Ultimo;
         }
     }
     public Dado Pop()
     {
         if (EstaVazia())
             throw new PilhaVaziaException("Underflow da pilha");
-        Dado o = primeiro.Info;
-        Remove(o);
+        Dado o = lista.Primeiro;
+        lista.Remove(o);
         return o;
     }
     public int Tamanho()
     {
-        return Contar;
+        return lista.Contar;
     }
-    public new bool EstaVazia()
+    public bool EstaVazia()
     {
-        return base.EstaVazia;
+        return lista.EstaVazia;
     }
 }
