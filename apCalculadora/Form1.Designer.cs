@@ -110,6 +110,7 @@
             // 
             // btnApagar
             // 
+            this.btnApagar.Enabled = false;
             this.btnApagar.Font = new System.Drawing.Font("Arial", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnApagar.Location = new System.Drawing.Point(330, 136);
             this.btnApagar.Name = "btnApagar";
@@ -121,6 +122,7 @@
             // 
             // btnDividir
             // 
+            this.btnDividir.Enabled = false;
             this.btnDividir.Location = new System.Drawing.Point(436, 136);
             this.btnDividir.Name = "btnDividir";
             this.btnDividir.Size = new System.Drawing.Size(100, 100);
@@ -171,6 +173,7 @@
             // 
             // btnMultiplicar
             // 
+            this.btnMultiplicar.Enabled = false;
             this.btnMultiplicar.Location = new System.Drawing.Point(436, 242);
             this.btnMultiplicar.Name = "btnMultiplicar";
             this.btnMultiplicar.Size = new System.Drawing.Size(100, 100);
@@ -181,6 +184,7 @@
             // 
             // btnFatorial
             // 
+            this.btnFatorial.Enabled = false;
             this.btnFatorial.Location = new System.Drawing.Point(12, 348);
             this.btnFatorial.Name = "btnFatorial";
             this.btnFatorial.Size = new System.Drawing.Size(100, 100);
@@ -231,6 +235,7 @@
             // 
             // btnElevado
             // 
+            this.btnElevado.Enabled = false;
             this.btnElevado.Location = new System.Drawing.Point(12, 454);
             this.btnElevado.Name = "btnElevado";
             this.btnElevado.Size = new System.Drawing.Size(100, 100);
@@ -271,6 +276,7 @@
             // 
             // btnMais
             // 
+            this.btnMais.Enabled = false;
             this.btnMais.Location = new System.Drawing.Point(436, 454);
             this.btnMais.Name = "btnMais";
             this.btnMais.Size = new System.Drawing.Size(100, 100);
@@ -287,15 +293,18 @@
             this.btnAbreParenteses.TabIndex = 22;
             this.btnAbreParenteses.Text = "(";
             this.btnAbreParenteses.UseVisualStyleBackColor = true;
+            this.btnAbreParenteses.Click += new System.EventHandler(this.btnAbreParenteses_Click);
             // 
             // btnFechaParenteses
             // 
+            this.btnFechaParenteses.Enabled = false;
             this.btnFechaParenteses.Location = new System.Drawing.Point(118, 560);
             this.btnFechaParenteses.Name = "btnFechaParenteses";
             this.btnFechaParenteses.Size = new System.Drawing.Size(100, 100);
             this.btnFechaParenteses.TabIndex = 23;
             this.btnFechaParenteses.Text = ")";
             this.btnFechaParenteses.UseVisualStyleBackColor = true;
+            this.btnFechaParenteses.Click += new System.EventHandler(this.btnAbreParenteses_Click);
             // 
             // btn0
             // 
