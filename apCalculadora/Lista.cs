@@ -206,37 +206,45 @@ public class Lista<Dado> where Dado : IComparable<Dado>
     }
     public bool ExisteDado(Dado outroProcurado)
     {
-        anterior = null;
+        //anterior = null;
+        //atual = primeiro;
+        //if (EstaVazia)
+        //    return false;
+        //if (outroProcurado.CompareTo(primeiro.Info) < 0)
+        //    return false;
+        //if (outroProcurado.CompareTo(ultimo.Info) > 0)
+        //{
+        //    anterior = ultimo;
+        //    atual = null;
+        //    return false;
+        //}
+        //bool achou = false;
+        //bool fim = false;
+        //while (!achou && !fim)
+        //{
+        //    if (atual == null)
+        //        fim = true;
+        //    else
+        //    if (outroProcurado.CompareTo(atual.Info) == 0)
+        //        achou = true;
+        //    else
+        //    if (atual.Info.CompareTo(outroProcurado) > 0)
+        //        fim = true;
+        //    else
+        //    {
+        //        anterior = atual;
+        //        atual = atual.Prox;
+        //    }
+        //}
+        //return achou;
         atual = primeiro;
-        if (EstaVazia)
-            return false;
-        if (outroProcurado.CompareTo(primeiro.Info) < 0)
-            return false;
-        if (outroProcurado.CompareTo(ultimo.Info) > 0)
+        while(atual != null)
         {
-            anterior = ultimo;
-            atual = null;
-            return false;
+            if (atual.Info.Equals(outroProcurado))
+                return true;
+            atual = atual.Prox;
         }
-        bool achou = false;
-        bool fim = false;
-        while (!achou && !fim)
-        {
-            if (atual == null)
-                fim = true;
-            else
-            if (outroProcurado.CompareTo(atual.Info) == 0)
-                achou = true;
-            else
-            if (atual.Info.CompareTo(outroProcurado) > 0)
-                fim = true;
-            else
-            {
-                anterior = atual;
-                atual = atual.Prox;
-            }
-        }
-        return achou;
+        return false;
     }
 
 

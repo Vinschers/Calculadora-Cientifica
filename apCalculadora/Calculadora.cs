@@ -37,7 +37,7 @@ public class Calculadora
         contas = new Pilha<Conta>();
         contas.Empilhar(new Conta());
         precedencia = new bool[7, 7];
-        StreamReader leitor = new StreamReader("precedencia.txt");
+        StreamReader leitor = new StreamReader("../../../precedencia.txt");
         int indiceLinha = 0;
         while (!leitor.EndOfStream)
         {
@@ -73,57 +73,80 @@ public class Calculadora
     }
     private Fila<string> CalcularPosfixa()
     {
-        string infixa = contas.Topo.Infixa;
-        Regex.Replace(infixa, @"\s+", "");
+        string[] infixa = contas.Topo.Infixa.Split(' ');
         Pilha<char> pilha = new Pilha<char>();
         Fila<string> pos = new Fila<string>();
-        char atual;
-        while (infixa.Length > 0)
+        for (int i = 0; i < infixa.Length; i++)
         {
-            atual = infixa[0];
-            int i = 1;
-            if ((atual < 48 || atual > 57) && atual != 32) //nao eh numero
+            string atual = infixa[i];
+            if (IsNumeric(atual))
             {
-                while (!pilha.EstaVazia() && HaPrecedencia(pilha.Topo, atual))
+                pos.Enfileirar(atual);
+            }
+            else
+            {
+                while (!pilha.EstaVazia() && HaPrecedencia(pilha.Topo, atual[0]))
                     pos.Enfileirar(pilha.Pop().ToString());
-                pilha.Empilhar(atual);
+                pilha.Empilhar(atual[0]);
             }
-            else if (atual != 32) //eh numero
-            {
-                string numero = atual + "";
-                try
-                {
-                    while (IsNumeric(infixa.Substring(0, i) + "") || infixa.Substring(i).Equals(","))
-                        numero = infixa.Substring(0, i++);
-                }
-                catch
-                {
-                    char c = infixa[infixa.Length - 1];
-                    if (c < 48 && c > 57)
-                        numero += c;
-                }
-                i--;
-                pos.Enfileirar(numero);
-            }
-            infixa = infixa.Substring(i);
         }
+        //while (infixa.Length > 0)
+        //{
+        //atual = infixa[0];
+        //int i = 1;
+        //if (atual != 32)
+        //{
+        //    bool ehNumerico = atual >= 48 && atual <= 57;
+        //    if ((atual == 45 || atual == 44) && (infixa[1] >= 48 && infixa[1] <= 57))
+        //        ehNumerico = true;
+
+        //    if (!ehNumerico) //nao eh numero
+        //    {
+        //        while (!pilha.EstaVazia() && HaPrecedencia(pilha.Topo, atual))
+        //            pos.Enfileirar(pilha.Pop().ToString());
+        //        pilha.Empilhar(atual);
+        //    }
+        //    else //eh numero
+        //    {
+        //        string numero = atual + "";
+        //        try
+        //        {
+        //            while (IsNumeric(infixa.Substring(0, i) + "") || infixa.Substring(i).Equals(","))
+        //                numero = infixa.Substring(0, i++);
+        //        }
+        //        catch
+        //        {
+        //            char c = infixa[infixa.Length - 1];
+        //            if (c < 48 && c > 57)
+        //                numero += c;
+        //        }
+        //        i--;
+        //        pos.Enfileirar(numero);
+        //    }
+        //}
+        //infixa = infixa.Substring(i);
+        //}
         while (!pilha.EstaVazia())
-            pos.Enfileirar(pilha.Pop() + "");
+        {
+            char aux = pilha.Pop();
+            if (aux != '(' && aux != ')')
+                pos.Enfileirar(pilha.Pop() + "");
+        }
         string[] posString = pos.ToArray();
         string posfixa = "";
-        atual = 'A';
+        char caracterAtual = 'A';
         int repeticoes = 0;
         for (int i = 0; i < posString.Length; i++)
         {
             if (IsNumeric(posString[i]))
             {
-                posfixa += Convert.ToChar(atual++) + "";
+                posfixa += Convert.ToChar(caracterAtual++) + "";
                 for (int rep = 0; rep < repeticoes; rep++)
                     posfixa += "'";
-                if (atual == 91) //acabou o alfabeto
+                if (caracterAtual == 91) //acabou o alfabeto
                 {
                     repeticoes++;
-                    atual = 'A';
+                    caracterAtual = 'A';
                 }
             }
             else

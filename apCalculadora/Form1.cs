@@ -13,6 +13,7 @@ namespace apCalculadora
     public partial class frmCalculadora : Form
     {
         const string posfixaDefault = "Operação em sequência pós-fixa: ";
+        string infixaMostrada = "";
         Button[,] botoes = new Button[5, 5];
 
         Calculadora calculadora;
@@ -97,46 +98,76 @@ namespace apCalculadora
         private void btnSqrt_Click(object sender, EventArgs e) //evento das operacoes
         {
             Button btn = (sender as Button);
+            string toAdd = "";
             if (btn.Text.Contains("log") || btn.Text.Contains("√"))
             {
-                if (calculadora.Infixa.Length > 0 && calculadora.Infixa[calculadora.Infixa.Length - 1] != '(')
-                    calculadora.Infixa += " " + btn.Text + "(";
-                else
-                    calculadora.Infixa += btn.Text + "(";
+                //if (infixaMostrada.Length > 0 && infixaMostrada[infixaMostrada.Length - 1] != '(')
+                //    toAdd = " " + btn.Text + "(";
+                //else
+                toAdd += btn.Text + "(";
             }
-            else if (!btn.Text.Contains("!") && !btn.Text.Contains("^") && !btn.Text.Contains("/"))
-                calculadora.Infixa += " " + btn.Text.Substring(((Button)sender).Text.Length - 1);
+            else if (btn.Text.Equals("-"))
+            {
+                if (infixaMostrada.Length == 0)
+                    toAdd = btn.Text;
+                else if (infixaMostrada.Length > 0 && infixaMostrada[infixaMostrada.Length - 1] == '(')
+                    toAdd = btn.Text;
+                else
+                    toAdd = " " + btn.Text;
+            }
+            else if (!btn.Text.Contains("!") && !btn.Text.Contains("-"))
+                toAdd += " " + btn.Text.Substring(btn.Text.Length - 1);
             else
-                calculadora.Infixa += btn.Text.Substring(((Button)sender).Text.Length - 1);
+                toAdd += btn.Text.Substring(btn.Text.Length - 1);
+            infixaMostrada += toAdd;
+            calculadora.Infixa += toAdd;
             HabilitarBotoes();
             AtualizarVisor();
         }
 
         private void btn0_Click(object sender, EventArgs e) //evento pra click em numeros
         {
-            if (calculadora.Infixa.Length > 0)
+            string toAdd = "";
+            if (infixaMostrada.Length > 0)
             {
-                string ultimoCaractere = calculadora.Infixa.Substring(calculadora.Infixa.Length - 1);
-                if (int.TryParse(ultimoCaractere, out int n) ||
-                    ultimoCaractere.Equals("(") || ultimoCaractere.Equals(",") || ultimoCaractere.Equals("^") || ultimoCaractere.Equals("/"))
-                    calculadora.Infixa += (sender as Button).Text;
+                if (infixaMostrada.Length == 1)
+                    toAdd = (sender as Button).Text;
                 else
-                    calculadora.Infixa += " " + (sender as Button).Text;
+                {
+                    string ultimoCaractere = infixaMostrada.Substring(infixaMostrada.Length - 1);
+                    if (ultimoCaractere.Equals("-"))
+                    {
+                        string antesDoUltimoCaractere = infixaMostrada.Substring(infixaMostrada.Length - 2, 1);
+                        if (antesDoUltimoCaractere.Equals("("))
+                        {
+                            toAdd = (sender as Button).Text;
+                        }
+                        else
+                            toAdd = " " + (sender as Button).Text;
+                    }
+                    else if (int.TryParse(ultimoCaractere, out int n) ||
+                        ultimoCaractere.Equals("(") || ultimoCaractere.Equals(","))
+                        toAdd = (sender as Button).Text;
+                    else
+                        toAdd = " " + (sender as Button).Text;
+                }
             }
             else
             {
                 if ((sender as Button).Text.Equals(","))
-                    calculadora.Infixa += "0" + (sender as Button).Text;
+                    toAdd = "0" + (sender as Button).Text;
                 else
-                    calculadora.Infixa += (sender as Button).Text;
+                    toAdd = (sender as Button).Text;
             }
+            infixaMostrada += toAdd;
+            calculadora.Infixa += toAdd;
             HabilitarBotoes();
             AtualizarVisor();
         }
 
         private void btnCE_Click(object sender, EventArgs e)
         {
-            calculadora.Infixa = "";
+            infixaMostrada = "";
             HabilitarBotoes();
             AtualizarVisor();
         }
@@ -151,26 +182,29 @@ namespace apCalculadora
             string ultimoCaractere = "";
             do
             {
-                calculadora.Infixa = calculadora.Infixa.Substring(0, calculadora.Infixa.Length - 1);
-                if (calculadora.Infixa.Length > 0)
-                    ultimoCaractere = calculadora.Infixa.Substring(calculadora.Infixa.Length - 1);
+                infixaMostrada = infixaMostrada.Substring(0, infixaMostrada.Length - 1);
+                if (infixaMostrada.Length > 0)
+                    ultimoCaractere = infixaMostrada.Substring(infixaMostrada.Length - 1);
                 else
                     break;
             } while (ultimoCaractere.Equals(" "));
+            HabilitarBotoes();
             AtualizarVisor();
         }
         private void AtualizarVisor()
         {
-            if (calculadora.Infixa.Length > 0)
+            if (infixaMostrada.Length > 0)
                 btnApagar.Enabled = true;
             else
                 btnApagar.Enabled = false;
-            txtVisor.Text = calculadora.Infixa;
+            txtVisor.Text = infixaMostrada;
         }
         private void HabilitarBotoes()
         {
-            string[] coisas = calculadora.Infixa.Split(' ');
+            string[] coisas = infixaMostrada.Split(' ');
             string ultimaCoisa = coisas[coisas.Length - 1];
+            if (ultimaCoisa.Length > 1)
+                ultimaCoisa = ultimaCoisa.Substring(ultimaCoisa.Length-1);
             if (!ultimaCoisa.Equals("") && IsNumeric(ultimaCoisa[ultimaCoisa.Length-1].ToString()))
             {
                 if (ultimaCoisa.Contains(","))
@@ -202,23 +236,48 @@ namespace apCalculadora
                 {
                     btnAbreParenteses.Enabled = true;
                     btnSqrt.Enabled = btnLog.Enabled = true;
-                    btnDividir.Enabled = btnMultiplicar.Enabled = btnElevado.Enabled = btnFatorial.Enabled = btnMais.Enabled = btnMenos.Enabled = false;
+                    if (ultimaCoisa.Equals("("))
+                        btnMenos.Enabled = true;
+                    else
+                        btnMenos.Enabled = false;
+                    if (!ultimaCoisa.Equals(")"))
+                        btnDividir.Enabled = btnMultiplicar.Enabled = btnElevado.Enabled = btnFatorial.Enabled = btnMais.Enabled = false;
+                    else
+                    {
+                        btnDividir.Enabled = btnMultiplicar.Enabled = btnElevado.Enabled = btnFatorial.Enabled = btnMais.Enabled = btnMenos.Enabled = true;
+                        btnFatorial.Enabled = btnLog.Enabled = btnSqrt.Enabled = false;
+                    }
                 }
+            }
+            if (infixaMostrada.Equals(""))
+            {
+                btnDecimal.Enabled = btnMenos.Enabled = true;
+                btnFechaParenteses.Enabled = false;
             }
         }
 
         private void btnAbreParenteses_Click(object sender, EventArgs e)
         {
             Button btn = (sender as Button);
-            if (calculadora.Infixa.Length > 0 && btn.Text.Equals("("))
+            if (infixaMostrada.Length > 0 && btn.Text.Equals("("))
+            {
+                infixaMostrada += " " + btn.Text;
+                calculadora.Infixa += " " + btn.Text + " ";
+            }
+            else if (btn.Text.Equals(")"))
+            {
+                infixaMostrada += btn.Text;
                 calculadora.Infixa += " " + btn.Text;
-            else
-                calculadora.Infixa += btn.Text;
+            }
+            HabilitarBotoes();
             AtualizarVisor();
         }
         private bool IsNumeric(string str)
         {
-            return int.TryParse(str, out int n);
+            for (int i = 0; i < str.Length; i++)
+                if (str[i] < 48 || str[i] > 57)
+                    return false;
+            return true;
         }
     }
 }
