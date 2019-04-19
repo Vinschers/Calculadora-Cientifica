@@ -250,6 +250,10 @@ namespace apCalculadora
                         btnFatorial.Enabled = btnLog.Enabled = btnSqrt.Enabled = false;
                     }
                 }
+                else
+                {
+                    btnAbreParenteses.Enabled = true;
+                }
             }
             if (infixaMostrada.Equals(""))
             {

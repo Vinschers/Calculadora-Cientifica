@@ -26,7 +26,7 @@ public class Calculadora
     {
         get
         {
-            return contas.EstaVazia()?"":contas.Topo.Infixa;
+            return contas.EstaVazia() ? "" : contas.Topo.Infixa;
         }
         set => contas.Topo.Infixa = value;
     }
@@ -58,12 +58,13 @@ public class Calculadora
         {
             string atual = posfixa.Retirar();
             if (IsNumeric(atual))
-                resultados.Empilhar(int.Parse(atual));
+                resultados.Empilhar(double.Parse(atual));
             else
             {
                 double segundo = resultados.Pop();
                 double primeiro = resultados.Pop();
-                resultados.Empilhar(RealizarOperacao(primeiro, segundo, atual));
+                double resultadoAtual = RealizarOperacao(primeiro, segundo, atual);
+                resultados.Empilhar(resultadoAtual);
             }
         }
         result = resultados.Pop();
@@ -86,51 +87,22 @@ public class Calculadora
             else
             {
                 while (!pilha.EstaVazia() && HaPrecedencia(pilha.Topo, atual[0]))
-                    pos.Enfileirar(pilha.Pop().ToString());
-                pilha.Empilhar(atual[0]);
+                {
+                    string operandoAtual = pilha.Pop().ToString();
+                    if (!operandoAtual.Equals("(") && !operandoAtual.Equals(")"))
+                        pos.Enfileirar(operandoAtual);
+                }
+                if (!pilha.EstaVazia() && pilha.Topo == '(' && atual[0] == ')')
+                    pilha.Pop();
+                if (atual[0] != ')')
+                    pilha.Empilhar(atual[0]);
             }
         }
-        //while (infixa.Length > 0)
-        //{
-        //atual = infixa[0];
-        //int i = 1;
-        //if (atual != 32)
-        //{
-        //    bool ehNumerico = atual >= 48 && atual <= 57;
-        //    if ((atual == 45 || atual == 44) && (infixa[1] >= 48 && infixa[1] <= 57))
-        //        ehNumerico = true;
-
-        //    if (!ehNumerico) //nao eh numero
-        //    {
-        //        while (!pilha.EstaVazia() && HaPrecedencia(pilha.Topo, atual))
-        //            pos.Enfileirar(pilha.Pop().ToString());
-        //        pilha.Empilhar(atual);
-        //    }
-        //    else //eh numero
-        //    {
-        //        string numero = atual + "";
-        //        try
-        //        {
-        //            while (IsNumeric(infixa.Substring(0, i) + "") || infixa.Substring(i).Equals(","))
-        //                numero = infixa.Substring(0, i++);
-        //        }
-        //        catch
-        //        {
-        //            char c = infixa[infixa.Length - 1];
-        //            if (c < 48 && c > 57)
-        //                numero += c;
-        //        }
-        //        i--;
-        //        pos.Enfileirar(numero);
-        //    }
-        //}
-        //infixa = infixa.Substring(i);
-        //}
         while (!pilha.EstaVazia())
         {
             char aux = pilha.Pop();
             if (aux != '(' && aux != ')')
-                pos.Enfileirar(pilha.Pop() + "");
+                pos.Enfileirar(aux + "");
         }
         string[] posString = pos.ToArray();
         string posfixa = "";
@@ -157,6 +129,8 @@ public class Calculadora
     }
     private bool HaPrecedencia(char i, char j)
     {
+        if (i == '(' && j == ')')
+            return false;
         if (i == '-')
             i = Convert.ToChar(i - 1);
         else if (i == '/')
@@ -178,10 +152,7 @@ public class Calculadora
     }
     private bool IsNumeric(string str)
     {
-        for (int i = 0; i < str.Length; i++)
-            if (str[i] < 48 || str[i] > 57)
-                return false;
-        return true;
+        return int.TryParse(str, out int n);
     }
     private double RealizarOperacao(double a, double b, string o)
     {
