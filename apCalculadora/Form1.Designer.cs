@@ -392,10 +392,13 @@
             this.Controls.Add(this.lblPosFixa);
             this.Controls.Add(this.txtVisor);
             this.Font = new System.Drawing.Font("Arial", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.KeyPreview = true;
             this.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.MinimumSize = new System.Drawing.Size(300, 400);
             this.Name = "frmCalculadora";
             this.Text = "Calculadora";
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FrmCalculadora_KeyDown);
+            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.FrmCalculadora_KeyPress);
             this.Resize += new System.EventHandler(this.frmCalculadora_Resize);
             this.ResumeLayout(false);
             this.PerformLayout();

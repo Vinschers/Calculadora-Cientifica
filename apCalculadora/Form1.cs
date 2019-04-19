@@ -222,5 +222,42 @@ namespace apCalculadora
         {
             return int.TryParse(str, out int n);
         }
+
+        private void FrmCalculadora_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Back && btnApagar.Enabled)
+                btnApagar.PerformClick();
+            else if (e.KeyCode == Keys.Enter && btnIgual.Enabled)
+                btnIgual.PerformClick();
+        }
+
+        private void FrmCalculadora_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            char caracter = e.KeyChar;
+            if (IsNumeric(caracter.ToString()))
+                (Controls.Find("btn" + caracter, false)[0] as Button).PerformClick();
+            else if (caracter == '(')
+                btnAbreParenteses.PerformClick();
+            else if (caracter == ')')
+                btnFechaParenteses.PerformClick();
+            else if (caracter == '.' || caracter == ',')
+                btnDecimal.PerformClick();
+            else if (caracter == '/')
+                btnDividir.PerformClick();
+            else if (caracter == '*')
+                btnMultiplicar.PerformClick();
+            else if (caracter == '-')
+                btnMenos.PerformClick();
+            else if (caracter == '+')
+                btnMais.PerformClick();
+            else if (caracter == '^')
+                btnElevado.PerformClick();
+            else if (caracter == '!')
+                btnFatorial.PerformClick();
+            else if (caracter.ToString().ToLower() == "q")
+                btnSqrt.PerformClick();
+            else if (caracter.ToString().ToLower() == "l")
+                btnLog.PerformClick();
+        }
     }
 }
