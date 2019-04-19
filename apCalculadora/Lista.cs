@@ -237,8 +237,9 @@ public class Lista<Dado> where Dado : IComparable<Dado>
         //    }
         //}
         //return achou;
+
         atual = primeiro;
-        while(atual != null)
+        while (atual != null)
         {
             if (atual.Info.Equals(outroProcurado))
                 return true;

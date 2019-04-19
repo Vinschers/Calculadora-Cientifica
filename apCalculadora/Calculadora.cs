@@ -35,7 +35,7 @@ public class Calculadora
     public Calculadora()
     {
         contas = new Pilha<Conta>();
-        precedencia = new bool[8, 8];
+        precedencia = new bool[9, 9];
         StreamReader leitor = new StreamReader("../../../precedencia.txt");
         int indiceLinha = 0;
         while (!leitor.EndOfStream)
@@ -89,7 +89,7 @@ public class Calculadora
     {
         string[] infixa = contas.Topo.Infixa.Split(' ');
 
-        Pilha<char> pilha = new Pilha<char>(); // Pilha de operadores
+        Pilha<string> pilha = new Pilha<string>(); // Pilha de operadores
         Fila<string> pos = new Fila<string>(); // Sequência posfixa
 
         for (int i = 0; i < infixa.Length; i++)
@@ -100,22 +100,22 @@ public class Calculadora
                 pos.Enfileirar(atual);
             else
             {
-                while (!pilha.EstaVazia() && HaPrecedencia(pilha.Topo, atual[0])) // Coloca os operadores da pilha na sequência enquanto seu topo tiver precedência sobre o operador lido
+                while (!pilha.EstaVazia() && HaPrecedencia(pilha.Topo[0], atual[0])) // Coloca os operadores da pilha na sequência enquanto seu topo tiver precedência sobre o operador lido
                 {
                     string operadorAtual = pilha.Pop().ToString();
                     if (!operadorAtual.Equals("(") && !operadorAtual.Equals(")"))
                         pos.Enfileirar(operadorAtual);
                 }
-                if (!pilha.EstaVazia() && pilha.Topo == '(' && atual[0] == ')') // Se o operador lido for um fecha parênteses, a pilha terá sido percorrida até encontrar um abre, que deve ser removido
+                if (!pilha.EstaVazia() && pilha.Topo == "(" && atual[0] == ')') // Se o operador lido for um fecha parênteses, a pilha terá sido percorrida até encontrar um abre, que deve ser removido
                     pilha.Pop();
                 else if (atual[0] != ')') // Se não for, como o operador lido tem preferência, ele deve ser empilhado
-                    pilha.Empilhar(atual[0]);
+                    pilha.Empilhar(atual);
             }
         }
         while (!pilha.EstaVazia()) // Se não há mais nenhum operador para ler, mas a pilha ainda tem elementos, ela deve ser descarregada
         {
-            char aux = pilha.Pop();
-            if (aux != '(' && aux != ')')
+            string aux = pilha.Pop();
+            if (aux != "(" && aux != ")")
                 pos.Enfileirar(aux + "");
         }
         string[] posString = pos.ToArray();
@@ -155,6 +155,10 @@ public class Calculadora
             i = Convert.ToChar(i - 48);
         else if (i == '!')
             i = Convert.ToChar(i + 6);
+        else if (i == 'l')
+            i = Convert.ToChar(i - 61);
+        else if (i == '√')
+            i = Convert.ToChar(i - 8683);
 
         if (j == '-')
             j = Convert.ToChar(j - 1);
@@ -164,6 +168,10 @@ public class Calculadora
             j = Convert.ToChar(j - 48);
         else if (j == '!')
             j = Convert.ToChar(j + 6);
+        else if (j == 'l')
+            j = Convert.ToChar(j - 61);
+        else if (j == '√')
+            j = Convert.ToChar(j - 8683);
 
         i = Convert.ToChar(i - 39);
         j = Convert.ToChar(j - 39);
@@ -176,7 +184,7 @@ public class Calculadora
     }
     private bool IsUnary(string o)
     {
-        return o == "!";
+        return o == "!" || o == "log" || o == "√";
     }
     private double RealizarOperacaoUnaria(double a, string o)
     {
@@ -192,6 +200,10 @@ public class Calculadora
                     a--;
                 }
                 return resultado;
+            case "log":
+                return Math.Log10(a);
+            case "√":
+                return Math.Sqrt(a);
             default:
                 return 0;
         }

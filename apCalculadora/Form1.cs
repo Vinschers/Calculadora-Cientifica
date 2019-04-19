@@ -108,6 +108,11 @@ namespace apCalculadora
             }
         }
 
+        // Serve para colocar funções após os operadores na notação interna à calculadora. Ex: log(2 + 3) -> (2 + 3)log
+        private Pilha<String> operacoesAColocar = new Pilha<string>();
+        // Quando o número chega a 0, a operação pode ser colocada. Isso permite expressões como log(2 + 3 * (5 -2))
+        private Pilha<int> quandoColocarOperacao = new Pilha<int>();
+
         private void btnSqrt_Click(object sender, EventArgs e) //evento das operacoes
         {
             Button btn = (sender as Button);
@@ -136,6 +141,15 @@ namespace apCalculadora
 
             if (btn.Text.Contains('!'))
                 calculadora.Infixa += " " + toAdd;
+            else if (btn.Text.Contains("log") || btn.Text.Contains("√"))
+            {
+                if (calculadora.Infixa.Length > 0)
+                    calculadora.Infixa += " (";
+                else
+                    calculadora.Infixa += "(";
+                operacoesAColocar.Empilhar(btn.Text);
+                quandoColocarOperacao.Empilhar(1);
+            }
             else
                 calculadora.Infixa += toAdd;
             HabilitarBotoes();
@@ -177,6 +191,8 @@ namespace apCalculadora
                     toAdd = (sender as Button).Text;
             }
             infixaMostrada += toAdd;
+            if (calculadora.Infixa.Length > 0 && calculadora.Infixa[calculadora.Infixa.Length - 1] == '(')
+                calculadora.Infixa += " ";
             calculadora.Infixa += toAdd;
             HabilitarBotoes();
             AtualizarVisor();
@@ -295,6 +311,9 @@ namespace apCalculadora
             {
                 infixaMostrada += " " + btn.Text;
                 calculadora.Infixa += " " + btn.Text + " ";
+
+                if (!quandoColocarOperacao.EstaVazia()) // Afasta a colocação da operação
+                    quandoColocarOperacao.Empilhar(quandoColocarOperacao.Pop() + 1);
             }
             else if (btn.Text.Equals("("))
             {
@@ -305,6 +324,16 @@ namespace apCalculadora
             {
                 infixaMostrada += btn.Text;
                 calculadora.Infixa += " " + btn.Text;
+
+                if (!quandoColocarOperacao.EstaVazia()) // Aproxima a colocação da operação
+                {
+                    quandoColocarOperacao.Empilhar(quandoColocarOperacao.Pop() - 1);
+                    if (quandoColocarOperacao.Topo == 0) // Quando chega a 0, a operação deve ser colocada, e suas informações podem ser retiradas das pilhas
+                    {
+                        calculadora.Infixa += " " + operacoesAColocar.Pop();
+                        quandoColocarOperacao.Pop();
+                    }
+                }
             }
             HabilitarBotoes();
             AtualizarVisor();
