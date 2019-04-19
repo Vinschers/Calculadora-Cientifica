@@ -22,6 +22,7 @@ namespace apCalculadora
             InitializeComponent();
             lblPosFixa.AutoSize = true;
             calculadora = new Calculadora();
+            calculadora.IniciarNovaConta();
             lblPosFixa.Text = posfixaDefault;
             // Facilita a responsividade
             ColocarBotoesNaMatriz();
@@ -92,9 +93,19 @@ namespace apCalculadora
 
         private void btnIgual_Click(object sender, EventArgs e) //evento para calcular
         {
-            double result = calculadora.CalcularExpressao();
-            lblPosFixa.Text = posfixaDefault + calculadora.Posfixa;
-            txtVisor.Text = result.ToString();
+            try
+            {
+                string result = calculadora.CalcularExpressao().ToString();
+                lblPosFixa.Text = posfixaDefault + calculadora.Posfixa;
+                txtVisor.Text = result;
+                calculadora.IniciarNovaConta();
+                calculadora.Infixa = result;
+                infixaMostrada = result;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void btnSqrt_Click(object sender, EventArgs e) //evento das operacoes
@@ -122,7 +133,11 @@ namespace apCalculadora
             else
                 toAdd += btn.Text.Substring(btn.Text.Length - 1);
             infixaMostrada += toAdd;
-            calculadora.Infixa += toAdd;
+
+            if (btn.Text.Contains('!'))
+                calculadora.Infixa += " " + toAdd;
+            else
+                calculadora.Infixa += toAdd;
             HabilitarBotoes();
             AtualizarVisor();
         }
@@ -170,6 +185,7 @@ namespace apCalculadora
         private void btnCE_Click(object sender, EventArgs e)
         {
             infixaMostrada = "";
+            calculadora.Infixa = "";
             HabilitarBotoes();
             AtualizarVisor();
         }
@@ -190,6 +206,16 @@ namespace apCalculadora
                 else
                     break;
             } while (ultimoCaractere.Equals(" "));
+
+            do
+            {
+                calculadora.Infixa = calculadora.Infixa.Substring(0, calculadora.Infixa.Length - 1);
+                if (calculadora.Infixa.Length > 0)
+                    ultimoCaractere = calculadora.Infixa.Substring(calculadora.Infixa.Length - 1);
+                else
+                    break;
+            } while (ultimoCaractere.Equals(" "));
+
             HabilitarBotoes();
             AtualizarVisor();
         }
@@ -247,7 +273,7 @@ namespace apCalculadora
                     else
                     {
                         btnDividir.Enabled = btnMultiplicar.Enabled = btnElevado.Enabled = btnFatorial.Enabled = btnMais.Enabled = btnMenos.Enabled = true;
-                        btnFatorial.Enabled = btnLog.Enabled = btnSqrt.Enabled = false;
+                        btnLog.Enabled = btnSqrt.Enabled = false;
                     }
                 }
                 else
@@ -269,6 +295,11 @@ namespace apCalculadora
             {
                 infixaMostrada += " " + btn.Text;
                 calculadora.Infixa += " " + btn.Text + " ";
+            }
+            else if (btn.Text.Equals("("))
+            {
+                infixaMostrada += btn.Text;
+                calculadora.Infixa += btn.Text + " ";
             }
             else if (btn.Text.Equals(")"))
             {

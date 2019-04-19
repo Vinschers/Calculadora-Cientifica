@@ -35,8 +35,7 @@ public class Calculadora
     public Calculadora()
     {
         contas = new Pilha<Conta>();
-        contas.Empilhar(new Conta());
-        precedencia = new bool[7, 7];
+        precedencia = new bool[8, 8];
         StreamReader leitor = new StreamReader("../../../precedencia.txt");
         int indiceLinha = 0;
         while (!leitor.EndOfStream)
@@ -54,61 +53,78 @@ public class Calculadora
         Fila<string> posfixa = CalcularPosfixa();
         Pilha<double> resultados = new Pilha<double>();
         double result = 0;
-        while (!posfixa.EstaVazia())
+
+        while (!posfixa.EstaVazia()) // Percorre a pilha da sequência posfixa, realizando as operações
         {
             string atual = posfixa.Retirar();
             if (IsNumeric(atual))
                 resultados.Empilhar(double.Parse(atual));
             else
             {
-                double segundo = resultados.Pop();
-                double primeiro = resultados.Pop();
-                double resultadoAtual = RealizarOperacao(primeiro, segundo, atual);
-                resultados.Empilhar(resultadoAtual);
+                if (IsUnary(atual))
+                {
+                    double operando = resultados.Pop();
+                    double resultadoAtual = RealizarOperacaoUnaria(operando, atual);
+                    resultados.Empilhar(resultadoAtual);
+                }
+                else
+                {
+                    double segundo = resultados.Pop();
+                    double primeiro = resultados.Pop();
+                    double resultadoAtual = RealizarOperacaoBinaria(primeiro, segundo, atual);
+                    resultados.Empilhar(resultadoAtual);
+                }
             }
         }
-        result = resultados.Pop();
+
+        result = resultados.Pop(); // Após o percurso, o único elemento restante na pilha de resultados é o próprio resultado
         contas.Topo.Resultado = result;
-        contas.Empilhar(new Conta());
         return result;
+    }
+    public void IniciarNovaConta()
+    {
+        contas.Empilhar(new Conta());
     }
     private Fila<string> CalcularPosfixa()
     {
         string[] infixa = contas.Topo.Infixa.Split(' ');
-        Pilha<char> pilha = new Pilha<char>();
-        Fila<string> pos = new Fila<string>();
+
+        Pilha<char> pilha = new Pilha<char>(); // Pilha de operadores
+        Fila<string> pos = new Fila<string>(); // Sequência posfixa
+
         for (int i = 0; i < infixa.Length; i++)
         {
             string atual = infixa[i];
-            if (IsNumeric(atual))
-            {
+
+            if (IsNumeric(atual)) // Sempre que um número é encontrado, ele é colocado na sequência
                 pos.Enfileirar(atual);
-            }
             else
             {
-                while (!pilha.EstaVazia() && HaPrecedencia(pilha.Topo, atual[0]))
+                while (!pilha.EstaVazia() && HaPrecedencia(pilha.Topo, atual[0])) // Coloca os operadores da pilha na sequência enquanto seu topo tiver precedência sobre o operador lido
                 {
-                    string operandoAtual = pilha.Pop().ToString();
-                    if (!operandoAtual.Equals("(") && !operandoAtual.Equals(")"))
-                        pos.Enfileirar(operandoAtual);
+                    string operadorAtual = pilha.Pop().ToString();
+                    if (!operadorAtual.Equals("(") && !operadorAtual.Equals(")"))
+                        pos.Enfileirar(operadorAtual);
                 }
-                if (!pilha.EstaVazia() && pilha.Topo == '(' && atual[0] == ')')
+                if (!pilha.EstaVazia() && pilha.Topo == '(' && atual[0] == ')') // Se o operador lido for um fecha parênteses, a pilha terá sido percorrida até encontrar um abre, que deve ser removido
                     pilha.Pop();
-                if (atual[0] != ')')
+                else if (atual[0] != ')') // Se não for, como o operador lido tem preferência, ele deve ser empilhado
                     pilha.Empilhar(atual[0]);
             }
         }
-        while (!pilha.EstaVazia())
+        while (!pilha.EstaVazia()) // Se não há mais nenhum operador para ler, mas a pilha ainda tem elementos, ela deve ser descarregada
         {
             char aux = pilha.Pop();
             if (aux != '(' && aux != ')')
                 pos.Enfileirar(aux + "");
         }
         string[] posString = pos.ToArray();
+
         string posfixa = "";
         char caracterAtual = 'A';
         int repeticoes = 0;
-        for (int i = 0; i < posString.Length; i++)
+
+        for (int i = 0; i < posString.Length; i++) // Transforma a sequência de números em letras.
         {
             if (IsNumeric(posString[i]))
             {
@@ -137,6 +153,8 @@ public class Calculadora
             i = Convert.ToChar(i - 2);
         else if (i == '^')
             i = Convert.ToChar(i - 48);
+        else if (i == '!')
+            i = Convert.ToChar(i + 6);
 
         if (j == '-')
             j = Convert.ToChar(j - 1);
@@ -144,9 +162,11 @@ public class Calculadora
             j = Convert.ToChar(j - 2);
         else if (j == '^')
             j = Convert.ToChar(j - 48);
+        else if (j == '!')
+            j = Convert.ToChar(j + 6);
 
-        i = Convert.ToChar(i - 40);
-        j = Convert.ToChar(j - 40);
+        i = Convert.ToChar(i - 39);
+        j = Convert.ToChar(j - 39);
 
         return precedencia[i, j];
     }
@@ -154,7 +174,29 @@ public class Calculadora
     {
         return int.TryParse(str, out int n);
     }
-    private double RealizarOperacao(double a, double b, string o)
+    private bool IsUnary(string o)
+    {
+        return o == "!";
+    }
+    private double RealizarOperacaoUnaria(double a, string o)
+    {
+        switch (o)
+        {
+            case "!":
+                if (a != Math.Abs(Math.Floor(a)))
+                    throw new Exception("Um número precisa ser inteiro e natural para realizar fatorial!");
+                double resultado = 1;
+                while (a > 0)
+                {
+                    resultado *= a;
+                    a--;
+                }
+                return resultado;
+            default:
+                return 0;
+        }
+    }
+    private double RealizarOperacaoBinaria(double a, double b, string o)
     {
         switch (o)
         {
