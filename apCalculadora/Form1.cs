@@ -24,7 +24,7 @@ namespace apCalculadora
             lblPosFixa.Text = posfixaDefault;
             // Facilita a responsividade
             ColocarBotoesNaMatriz();
-            
+
         }
         private void ColocarBotoesNaMatriz()
         {
@@ -50,7 +50,9 @@ namespace apCalculadora
         private void frmCalculadora_Resize(object sender, EventArgs e)
         {
             lblPosFixa.MaximumSize = new Size(Width, 0); //permite quebra de linha no label da sequencia posfixa
-            Reposicionar();       
+
+            if (Width >= MinimumSize.Width && Height >= MinimumSize.Height) // Evita que haja tentativa de responsividade enquanto a tela volta de um estado minimizado
+                Reposicionar();
         }
         private void Reposicionar()
         {
@@ -58,7 +60,7 @@ namespace apCalculadora
             int margem = 3;
 
             // Cada botão terá 1/5 do tamanho total, desconsiderando espaços externos e margens internas
-            int widthBotoes = (Width - 39 - 8 * margem) / 5; 
+            int widthBotoes = (Width - 39 - 8 * margem) / 5;
             int heightBotoes = (Height - 183 - 8 * margem) / 5;
 
             float fontSize;
@@ -89,8 +91,8 @@ namespace apCalculadora
 
         private void btnIgual_Click(object sender, EventArgs e) //evento para calcular
         {
-            lblPosFixa.Text = posfixaDefault + calculadora.Posfixa;
             double result = calculadora.CalcularExpressao();
+            lblPosFixa.Text = posfixaDefault + calculadora.Posfixa;
             txtVisor.Text = result.ToString();
         }
 
@@ -171,7 +173,7 @@ namespace apCalculadora
         {
             string[] coisas = calculadora.Infixa.Split(' ');
             string ultimaCoisa = coisas[coisas.Length - 1];
-            if (!ultimaCoisa.Equals("") && IsNumeric(ultimaCoisa[ultimaCoisa.Length-1].ToString()))
+            if (!ultimaCoisa.Equals("") && IsNumeric(ultimaCoisa[ultimaCoisa.Length - 1].ToString()))
             {
                 if (ultimaCoisa.Contains(","))
                     btnDecimal.Enabled = false;
