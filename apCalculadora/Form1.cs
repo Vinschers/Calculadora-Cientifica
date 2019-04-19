@@ -25,7 +25,7 @@ namespace apCalculadora
             lblPosFixa.Text = posfixaDefault;
             // Facilita a responsividade
             ColocarBotoesNaMatriz();
-            
+
         }
         private void ColocarBotoesNaMatriz()
         {
@@ -51,7 +51,9 @@ namespace apCalculadora
         private void frmCalculadora_Resize(object sender, EventArgs e)
         {
             lblPosFixa.MaximumSize = new Size(Width, 0); //permite quebra de linha no label da sequencia posfixa
-            Reposicionar();       
+
+            if (Width >= MinimumSize.Width && Height >= MinimumSize.Height) // Evita que haja tentativa de responsividade enquanto a tela volta de um estado minimizado
+                Reposicionar();
         }
         private void Reposicionar()
         {
@@ -59,7 +61,7 @@ namespace apCalculadora
             int margem = 3;
 
             // Cada botão terá 1/5 do tamanho total, desconsiderando espaços externos e margens internas
-            int widthBotoes = (Width - 39 - 8 * margem) / 5; 
+            int widthBotoes = (Width - 39 - 8 * margem) / 5;
             int heightBotoes = (Height - 183 - 8 * margem) / 5;
 
             float fontSize;
@@ -90,8 +92,8 @@ namespace apCalculadora
 
         private void btnIgual_Click(object sender, EventArgs e) //evento para calcular
         {
-            lblPosFixa.Text = posfixaDefault + calculadora.Posfixa;
             double result = calculadora.CalcularExpressao();
+            lblPosFixa.Text = posfixaDefault + calculadora.Posfixa;
             txtVisor.Text = result.ToString();
         }
 
@@ -278,6 +280,43 @@ namespace apCalculadora
                 if (str[i] < 48 || str[i] > 57)
                     return false;
             return true;
+        }
+
+        private void FrmCalculadora_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Back && btnApagar.Enabled)
+                btnApagar.PerformClick();
+            else if (e.KeyCode == Keys.Enter && btnIgual.Enabled)
+                btnIgual.PerformClick();
+        }
+
+        private void FrmCalculadora_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            char caracter = e.KeyChar;
+            if (IsNumeric(caracter.ToString()))
+                (Controls.Find("btn" + caracter, false)[0] as Button).PerformClick();
+            else if (caracter == '(')
+                btnAbreParenteses.PerformClick();
+            else if (caracter == ')')
+                btnFechaParenteses.PerformClick();
+            else if (caracter == '.' || caracter == ',')
+                btnDecimal.PerformClick();
+            else if (caracter == '/')
+                btnDividir.PerformClick();
+            else if (caracter == '*')
+                btnMultiplicar.PerformClick();
+            else if (caracter == '-')
+                btnMenos.PerformClick();
+            else if (caracter == '+')
+                btnMais.PerformClick();
+            else if (caracter == '^')
+                btnElevado.PerformClick();
+            else if (caracter == '!')
+                btnFatorial.PerformClick();
+            else if (caracter.ToString().ToLower() == "q")
+                btnSqrt.PerformClick();
+            else if (caracter.ToString().ToLower() == "l")
+                btnLog.PerformClick();
         }
     }
 }
