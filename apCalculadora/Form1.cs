@@ -213,24 +213,60 @@ namespace apCalculadora
 
         private void btnApagar_Click(object sender, EventArgs e)
         {
-            string ultimoCaractere = "";
+            char ultimoCaractere = ' ';
             do
             {
                 infixaMostrada = infixaMostrada.Substring(0, infixaMostrada.Length - 1);
                 if (infixaMostrada.Length > 0)
-                    ultimoCaractere = infixaMostrada.Substring(infixaMostrada.Length - 1);
+                    ultimoCaractere = infixaMostrada[infixaMostrada.Length - 1];
                 else
                     break;
-            } while (ultimoCaractere.Equals(" "));
+            } while (ultimoCaractere.Equals(' '));
 
+            if (ultimoCaractere == '√')
+                infixaMostrada = infixaMostrada.Substring(0, infixaMostrada.Length - 1);
+            else if (ultimoCaractere == 'g' && infixaMostrada.Length > 2 && infixaMostrada.Substring(infixaMostrada.Length - 3) == "log")
+                infixaMostrada = infixaMostrada.Substring(0, infixaMostrada.Length - 3);
+
+            char qualApagou = ' ';
             do
             {
+                qualApagou = calculadora.Infixa[calculadora.Infixa.Length - 1];
+
+                if (qualApagou == '√')
+                {
+                    operacoesAColocar.Empilhar("√");
+                    quandoColocarOperacao.Empilhar(1);
+
+                    calculadora.Infixa = calculadora.Infixa.Substring(0, calculadora.Infixa.Length - 1);
+                }
+                else if (qualApagou == 'g' && calculadora.Infixa.Length > 2 && calculadora.Infixa.Substring(calculadora.Infixa.Length - 3) == "log")
+                {
+                    operacoesAColocar.Empilhar("log");
+                    quandoColocarOperacao.Empilhar(1);
+
+                    calculadora.Infixa = calculadora.Infixa.Substring(0, calculadora.Infixa.Length - 3);
+                }
+
                 calculadora.Infixa = calculadora.Infixa.Substring(0, calculadora.Infixa.Length - 1);
+
                 if (calculadora.Infixa.Length > 0)
-                    ultimoCaractere = calculadora.Infixa.Substring(calculadora.Infixa.Length - 1);
+                    ultimoCaractere = calculadora.Infixa[calculadora.Infixa.Length - 1];
                 else
                     break;
-            } while (ultimoCaractere.Equals(" "));
+            } while (ultimoCaractere.Equals(' '));
+
+            if (qualApagou == '(' && !operacoesAColocar.EstaVazia())
+            {
+                quandoColocarOperacao.Empilhar(quandoColocarOperacao.Pop() - 1); // Significa que a operação está mais próxima de ser colocada
+                if (quandoColocarOperacao.Topo == 0) // Quer dizer que o parênteses que deu origem à operação - Ex: log( - foi apagado
+                {
+                    operacoesAColocar.Pop();
+                    quandoColocarOperacao.Pop();
+                }
+            }
+            else if (qualApagou == ')' && !operacoesAColocar.EstaVazia()) // Afasta a operação de poder ser colocada
+                quandoColocarOperacao.Empilhar(quandoColocarOperacao.Pop() + 1);
 
             HabilitarBotoes();
             AtualizarVisor();
