@@ -97,7 +97,7 @@
             this.btnCE.TabIndex = 3;
             this.btnCE.Text = "CE";
             this.btnCE.UseVisualStyleBackColor = true;
-            this.btnCE.Click += new System.EventHandler(this.btnCE_Click);
+            this.btnCE.Click += new System.EventHandler(this.BtnCE_Click);
             // 
             // btnC
             // 

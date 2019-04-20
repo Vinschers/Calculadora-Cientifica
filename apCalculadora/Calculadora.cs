@@ -180,7 +180,7 @@ public class Calculadora
     }
     private bool IsNumeric(string str)
     {
-        return int.TryParse(str, out int n);
+        return double.TryParse(str, out double n);
     }
     private bool IsUnary(string o)
     {

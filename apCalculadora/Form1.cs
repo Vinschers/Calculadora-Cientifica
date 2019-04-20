@@ -198,17 +198,12 @@ namespace apCalculadora
             AtualizarVisor();
         }
 
-        private void btnCE_Click(object sender, EventArgs e)
+        private void btnC_Click(object sender, EventArgs e)
         {
             infixaMostrada = "";
             calculadora.Infixa = "";
             HabilitarBotoes();
             AtualizarVisor();
-        }
-
-        private void btnC_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void btnApagar_Click(object sender, EventArgs e)
@@ -284,8 +279,8 @@ namespace apCalculadora
             string[] coisas = infixaMostrada.Split(' ');
             string ultimaCoisa = coisas[coisas.Length - 1];
             if (ultimaCoisa.Length > 1)
-                ultimaCoisa = ultimaCoisa.Substring(ultimaCoisa.Length-1);
-            if (!ultimaCoisa.Equals("") && IsNumeric(ultimaCoisa[ultimaCoisa.Length-1].ToString()))
+                ultimaCoisa = ultimaCoisa.Substring(ultimaCoisa.Length - 1);
+            if (!ultimaCoisa.Equals("") && IsNumeric(ultimaCoisa[ultimaCoisa.Length - 1].ToString()))
             {
                 if (ultimaCoisa.Contains(","))
                     btnDecimal.Enabled = false;
@@ -376,10 +371,7 @@ namespace apCalculadora
         }
         private bool IsNumeric(string str)
         {
-            for (int i = 0; i < str.Length; i++)
-                if (str[i] < 48 || str[i] > 57)
-                    return false;
-            return true;
+            return double.TryParse(str, out double n);
         }
 
         private void FrmCalculadora_KeyDown(object sender, KeyEventArgs e)
@@ -417,6 +409,64 @@ namespace apCalculadora
                 btnSqrt.PerformClick();
             else if (caracter.ToString().ToLower() == "l")
                 btnLog.PerformClick();
+        }
+
+        private void BtnCE_Click(object sender, EventArgs e)
+        {
+            ZerarUltimoNumeroInfixaMostrada();
+            ZerarUltimoNumeroInfixaOculta();
+            
+            HabilitarBotoes();
+            AtualizarVisor();
+        }
+        private void ZerarUltimoNumeroInfixaMostrada()
+        {
+            // Quebra as partes da infixa exibida no visor através do espaço
+            var partesInfixaMostrada = infixaMostrada.Split(' ');
+
+            // Percorre as partes do final até o começo. Quando o último elemento numérico é zerado, o loop para
+            for (int i = partesInfixaMostrada.Length - 1; i >= 0; i--)
+            {
+                var parte = "";
+                var jaColocouZero = false;
+
+                // Aquela parte pode não ser inteiramente número ou operador. Pode existir "*(26", por exemplo
+                // Por isso, cada caracter da parte é percorrido, sendo colocado numa nova string (parte) se for um operador
+                // Ou, se indicar um número e o 0 ainda não tiver sido colocado
+                for (int j = 0; j < partesInfixaMostrada[i].Length; j++)
+                    if (IsNumeric(partesInfixaMostrada[i][j].ToString()) || partesInfixaMostrada[i][j] == ',') // É número ou quebra um número
+                    {
+                        if (!jaColocouZero)
+                        {
+                            parte += "0";
+                            jaColocouZero = true;
+                        }
+                    }
+                    else // É operador, pode ser colocado onde estava na nova string
+                        parte += partesInfixaMostrada[i][j];
+
+                partesInfixaMostrada[i] = parte; // A parte é substituída por uma nova string. Com o exemplo anterior, seria "*(0"
+
+                if (jaColocouZero) // Nesse ponto, indica que o último elemento numérico já virou 0
+                    break;
+            }
+            infixaMostrada = string.Join(" ", partesInfixaMostrada); // Junta as partes novamente na infixa mostrada
+        }
+        private void ZerarUltimoNumeroInfixaOculta()
+        {
+            // Quebra as partes da infixa interna através do espaço
+            var partesInfixa = calculadora.Infixa.Split(' ');
+
+            // Ao contrário da infixa mostrada no visor, a infixa interna nunca tem mais de um elemento não separado por espaço
+            // Por isso, cada parte será apenas ou operador ou número
+            for (int i = partesInfixa.Length - 1; i >= 0; i--)
+                if (IsNumeric(partesInfixa[i])) // Percorre do final ao começo até achar um número, que é substituído por 0
+                {
+                    partesInfixa[i] = "0";
+                    break;
+                }
+
+            calculadora.Infixa = string.Join(" ", partesInfixa); // Junta as partes novamente na infixa interna
         }
     }
 }
