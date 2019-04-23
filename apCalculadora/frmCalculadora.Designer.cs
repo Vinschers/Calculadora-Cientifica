@@ -1,6 +1,6 @@
 ﻿namespace apCalculadora
 {
-    partial class frmCalculadora
+    partial class FrmCalculadora
     {
         /// <summary>
         /// Variável de designer necessária.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.txtVisor = new System.Windows.Forms.TextBox();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmCalculadora));
             this.lblPosFixa = new System.Windows.Forms.Label();
             this.btnSqrt = new System.Windows.Forms.Button();
             this.btnCE = new System.Windows.Forms.Button();
@@ -55,24 +55,15 @@
             this.btn0 = new System.Windows.Forms.Button();
             this.btnDecimal = new System.Windows.Forms.Button();
             this.btnIgual = new System.Windows.Forms.Button();
+            this.txtVisor = new System.Windows.Forms.Label();
+            this.btnHistorico = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            // 
-            // txtVisor
-            // 
-            this.txtVisor.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtVisor.Location = new System.Drawing.Point(0, 0);
-            this.txtVisor.Multiline = true;
-            this.txtVisor.Name = "txtVisor";
-            this.txtVisor.ReadOnly = true;
-            this.txtVisor.Size = new System.Drawing.Size(547, 88);
-            this.txtVisor.TabIndex = 0;
             // 
             // lblPosFixa
             // 
             this.lblPosFixa.AutoSize = true;
             this.lblPosFixa.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblPosFixa.Location = new System.Drawing.Point(-3, 91);
+            this.lblPosFixa.Location = new System.Drawing.Point(-3, 93);
             this.lblPosFixa.Name = "lblPosFixa";
             this.lblPosFixa.Size = new System.Drawing.Size(0, 16);
             this.lblPosFixa.TabIndex = 1;
@@ -359,11 +350,37 @@
             this.btnIgual.UseVisualStyleBackColor = true;
             this.btnIgual.Click += new System.EventHandler(this.btnIgual_Click);
             // 
-            // frmCalculadora
+            // txtVisor
+            // 
+            this.txtVisor.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtVisor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.txtVisor.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.txtVisor.Font = new System.Drawing.Font("Arial", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtVisor.Location = new System.Drawing.Point(12, 9);
+            this.txtVisor.Name = "txtVisor";
+            this.txtVisor.Size = new System.Drawing.Size(444, 74);
+            this.txtVisor.TabIndex = 27;
+            this.txtVisor.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // btnHistorico
+            // 
+            this.btnHistorico.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnHistorico.Font = new System.Drawing.Font("Arial", 20F);
+            this.btnHistorico.Image = ((System.Drawing.Image)(resources.GetObject("btnHistorico.Image")));
+            this.btnHistorico.Location = new System.Drawing.Point(462, 9);
+            this.btnHistorico.Name = "btnHistorico";
+            this.btnHistorico.Size = new System.Drawing.Size(74, 74);
+            this.btnHistorico.TabIndex = 28;
+            this.btnHistorico.UseVisualStyleBackColor = true;
+            this.btnHistorico.Click += new System.EventHandler(this.BtnHistorico_Click);
+            // 
+            // FrmCalculadora
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 32F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(547, 668);
+            this.Controls.Add(this.txtVisor);
             this.Controls.Add(this.btnIgual);
             this.Controls.Add(this.btnDecimal);
             this.Controls.Add(this.btn0);
@@ -390,12 +407,13 @@
             this.Controls.Add(this.btnCE);
             this.Controls.Add(this.btnSqrt);
             this.Controls.Add(this.lblPosFixa);
-            this.Controls.Add(this.txtVisor);
+            this.Controls.Add(this.btnHistorico);
             this.Font = new System.Drawing.Font("Arial", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
             this.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.MinimumSize = new System.Drawing.Size(300, 400);
-            this.Name = "frmCalculadora";
+            this.Name = "FrmCalculadora";
             this.Text = "Calculadora";
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FrmCalculadora_KeyDown);
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.FrmCalculadora_KeyPress);
@@ -406,8 +424,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.TextBox txtVisor;
         private System.Windows.Forms.Label lblPosFixa;
         private System.Windows.Forms.Button btnSqrt;
         private System.Windows.Forms.Button btnCE;
@@ -434,6 +450,8 @@
         private System.Windows.Forms.Button btn0;
         private System.Windows.Forms.Button btnDecimal;
         private System.Windows.Forms.Button btnIgual;
+        private System.Windows.Forms.Label txtVisor;
+        private System.Windows.Forms.Button btnHistorico;
     }
 }
 

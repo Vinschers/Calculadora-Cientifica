@@ -31,6 +31,7 @@ public class Calculadora
         set => contas.Topo.Infixa = value;
     }
     public string Posfixa { get => contas.Topo.Posfixa; }
+    public double Resultado { get => contas.Topo.Resultado; }
 
     public Calculadora()
     {

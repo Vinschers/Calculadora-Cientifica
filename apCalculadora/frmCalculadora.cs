@@ -10,23 +10,33 @@ using System.Windows.Forms;
 
 namespace apCalculadora
 {
-    public partial class frmCalculadora : Form
+    public partial class FrmCalculadora : Form
     {
         const string posfixaDefault = "Operação em sequência pós-fixa: ";
         string infixaMostrada = "";
         Button[,] botoes = new Button[5, 5];
+        FrmHistorico historico;
 
         Calculadora calculadora;
-        public frmCalculadora()
+        public FrmCalculadora()
         {
             InitializeComponent();
+
             lblPosFixa.AutoSize = true;
+
             calculadora = new Calculadora();
             calculadora.IniciarNovaConta();
+
             lblPosFixa.Text = posfixaDefault;
+
+            // Guarda o histórico de contas
+            historico = new FrmHistorico();
+
             // Facilita a responsividade
             ColocarBotoesNaMatriz();
 
+            // Tira o foco de qualquer botão
+            txtVisor.Focus();
         }
         private void ColocarBotoesNaMatriz()
         {
@@ -97,10 +107,16 @@ namespace apCalculadora
             {
                 string result = calculadora.CalcularExpressao().ToString();
                 lblPosFixa.Text = posfixaDefault + calculadora.Posfixa;
+
+                historico.Atualizar(infixaMostrada + " = " + result);
+                infixaMostrada = result;
                 txtVisor.Text = result;
+
                 calculadora.IniciarNovaConta();
                 calculadora.Infixa = result;
-                infixaMostrada = result;
+
+                // Tira o foco do botão
+                txtVisor.Focus();
             }
             catch (Exception ex)
             {
@@ -196,6 +212,8 @@ namespace apCalculadora
             calculadora.Infixa += toAdd;
             HabilitarBotoes();
             AtualizarVisor();
+
+            txtVisor.Focus();
         }
 
         private void btnC_Click(object sender, EventArgs e)
@@ -273,6 +291,9 @@ namespace apCalculadora
             else
                 btnApagar.Enabled = false;
             txtVisor.Text = infixaMostrada;
+
+            // Tira o foco dos botões
+            txtVisor.Focus();
         }
         private void HabilitarBotoes()
         {
@@ -376,9 +397,9 @@ namespace apCalculadora
 
         private void FrmCalculadora_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Back && btnApagar.Enabled)
+            if (e.KeyCode == Keys.Back)
                 btnApagar.PerformClick();
-            else if (e.KeyCode == Keys.Enter && btnIgual.Enabled)
+            else if (e.KeyCode == Keys.Enter)
                 btnIgual.PerformClick();
         }
 
@@ -387,6 +408,8 @@ namespace apCalculadora
             char caracter = e.KeyChar;
             if (IsNumeric(caracter.ToString()))
                 (Controls.Find("btn" + caracter, false)[0] as Button).PerformClick();
+            else if (caracter == '=')
+                btnIgual.PerformClick();
             else if (caracter == '(')
                 btnAbreParenteses.PerformClick();
             else if (caracter == ')')
@@ -467,6 +490,14 @@ namespace apCalculadora
                 }
 
             calculadora.Infixa = string.Join(" ", partesInfixa); // Junta as partes novamente na infixa interna
+        }
+
+        private void BtnHistorico_Click(object sender, EventArgs e)
+        {
+            historico.Show();
+
+            txtVisor.Focus();
+            historico.Focus();
         }
     }
 }
