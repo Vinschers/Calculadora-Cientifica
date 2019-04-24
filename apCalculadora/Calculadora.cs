@@ -6,29 +6,95 @@ public class Calculadora
 {
     private class Conta : IComparable<Conta>
     {
-        public string Infixa { get; set; }
+        private bool IsNumeric(string str)
+        {
+            return double.TryParse(str, out double n);
+        }
+        public string[] Infixa { get; set; }
         public string Posfixa { get; set; }
         public double Resultado { get; set; }
         public int CompareTo(Conta outra)
         {
-            return Infixa.CompareTo(outra.Infixa);
+            return Resultado.CompareTo(outra.Resultado);
         }
+        public int QtdElementos { get; set; }
         public Conta()
         {
-            Infixa = Posfixa = "";
+            Infixa = new string[10];
+            Posfixa = "";
             Resultado = 0;
+        }
+        public void Adicionar(string v)
+        {
+            if (IsNumeric(v) && IsNumeric(Infixa[QtdElementos - 1]))
+            {
+                Infixa[QtdElementos - 1] += v;
+            }
+            else
+            {
+                Infixa[QtdElementos++] = v;
+                if (QtdElementos == Infixa.Length)
+                    AumentarVetor();
+            }
+        }
+        private void AumentarVetor()
+        {
+            string[] novo = new string[(int)Math.Floor(Infixa.Length * 1.5)];
+            for (int i = 0; i < Infixa.Length; i++)
+                novo[i] = Infixa[i];
+            Infixa = novo;
+        }
+        public string Excluir()
+        {
+            string ret = Infixa[--QtdElementos];
+            Infixa[QtdElementos] = null;
+            return ret;
         }
     }
     private bool[,] precedencia;
     Pilha<Conta> contas;
 
-    public string Infixa
+    public void AdicionarAoVetor(string valor)
+    {
+        if (!contas.EstaVazia())
+            contas.Topo.Adicionar(valor);
+    }
+    public string ExcluirDoVetor()
+    {
+        if (!contas.EstaVazia())
+            return contas.Topo.Excluir();
+        return "";
+    }
+    public string UltimoTermo()
+    {
+        if (!contas.EstaVazia())
+            return contas.Topo.Infixa[contas.Topo.QtdElementos - 1];
+        return "";
+    }
+    public void AlterarUltimoTermo(string v)
+    {
+        if (!contas.EstaVazia())
+            contas.Topo.Infixa[contas.Topo.QtdElementos - 1] = v;
+    }
+    public string[] Infixa
     {
         get
         {
-            return contas.EstaVazia() ? "" : contas.Topo.Infixa;
+            if (!contas.EstaVazia())
+                return contas.Topo.Infixa;
+            return null;
         }
-        set => contas.Topo.Infixa = value;
+        set
+        {
+            if (!contas.EstaVazia())
+                contas.Topo.Infixa = value;
+        }
+    }
+    public void ExcluirVetor()
+    {
+        if (!contas.EstaVazia())
+            while (contas.Topo.QtdElementos > 0)
+                contas.Topo.Excluir();
     }
     public string Posfixa { get => contas.Topo.Posfixa; }
     public double Resultado { get => contas.Topo.Resultado; }
@@ -88,7 +154,7 @@ public class Calculadora
     }
     private Fila<string> CalcularPosfixa()
     {
-        string[] infixa = contas.Topo.Infixa.Split(' ');
+        string[] infixa = contas.Topo.Infixa;
 
         Pilha<string> pilha = new Pilha<string>(); // Pilha de operadores
         Fila<string> pos = new Fila<string>(); // Sequência posfixa

@@ -113,7 +113,8 @@ namespace apCalculadora
                 txtVisor.Text = result;
 
                 calculadora.IniciarNovaConta();
-                calculadora.Infixa = result;
+                //calculadora.Infixa = result;
+                calculadora.AdicionarAoVetor(result);
 
                 // Tira o foco do botão
                 txtVisor.Focus();
@@ -156,18 +157,21 @@ namespace apCalculadora
             infixaMostrada += toAdd;
 
             if (btn.Text.Contains('!'))
-                calculadora.Infixa += " " + toAdd;
+                //calculadora.Infixa += " " + toAdd;
+                calculadora.AdicionarAoVetor(toAdd);
             else if (btn.Text.Contains("log") || btn.Text.Contains("√"))
             {
-                if (calculadora.Infixa.Length > 0)
-                    calculadora.Infixa += " (";
-                else
-                    calculadora.Infixa += "(";
+                //if (calculadora.Infixa.Length > 0)
+                //    calculadora.Infixa += " (";
+                //else
+                //    calculadora.Infixa += "(";
+                calculadora.AdicionarAoVetor("(");
                 operacoesAColocar.Empilhar(btn.Text);
                 quandoColocarOperacao.Empilhar(1);
             }
             else
-                calculadora.Infixa += toAdd;
+                //calculadora.Infixa += toAdd;
+                calculadora.AdicionarAoVetor(toAdd);
             HabilitarBotoes();
             AtualizarVisor();
         }
@@ -207,9 +211,10 @@ namespace apCalculadora
                     toAdd = (sender as Button).Text;
             }
             infixaMostrada += toAdd;
-            if (calculadora.Infixa.Length > 0 && calculadora.Infixa[calculadora.Infixa.Length - 1] == '(')
-                calculadora.Infixa += " ";
-            calculadora.Infixa += toAdd;
+            //if (calculadora.Infixa.Length > 0 && calculadora.Infixa[calculadora.Infixa.Length - 1] == '(')
+            //    calculadora.Infixa += " ";
+            //calculadora.Infixa += toAdd;
+            calculadora.AdicionarAoVetor(toAdd);
             HabilitarBotoes();
             AtualizarVisor();
 
@@ -219,7 +224,8 @@ namespace apCalculadora
         private void btnC_Click(object sender, EventArgs e)
         {
             infixaMostrada = "";
-            calculadora.Infixa = "";
+            //calculadora.Infixa = "";
+            calculadora.ExcluirVetor();
             HabilitarBotoes();
             AtualizarVisor();
         }
@@ -362,7 +368,8 @@ namespace apCalculadora
             if (infixaMostrada.Length > 0 && btn.Text.Equals("("))
             {
                 infixaMostrada += " " + btn.Text;
-                calculadora.Infixa += " " + btn.Text + " ";
+                //calculadora.Infixa += " " + btn.Text + " ";
+                calculadora.AdicionarAoVetor(btn.Text);
 
                 if (!quandoColocarOperacao.EstaVazia()) // Afasta a colocação da operação
                     quandoColocarOperacao.Empilhar(quandoColocarOperacao.Pop() + 1);
@@ -370,19 +377,22 @@ namespace apCalculadora
             else if (btn.Text.Equals("("))
             {
                 infixaMostrada += btn.Text;
-                calculadora.Infixa += btn.Text + " ";
+                //calculadora.Infixa += btn.Text + " ";
+                calculadora.AdicionarAoVetor(btn.Text);
             }
             else if (btn.Text.Equals(")"))
             {
                 infixaMostrada += btn.Text;
-                calculadora.Infixa += " " + btn.Text;
+                //calculadora.Infixa += " " + btn.Text;
+                calculadora.AdicionarAoVetor(btn.Text);
 
                 if (!quandoColocarOperacao.EstaVazia()) // Aproxima a colocação da operação
                 {
                     quandoColocarOperacao.Empilhar(quandoColocarOperacao.Pop() - 1);
                     if (quandoColocarOperacao.Topo == 0) // Quando chega a 0, a operação deve ser colocada, e suas informações podem ser retiradas das pilhas
                     {
-                        calculadora.Infixa += " " + operacoesAColocar.Pop();
+                        //calculadora.Infixa += " " + operacoesAColocar.Pop();
+                        calculadora.AdicionarAoVetor(operacoesAColocar.Pop());
                         quandoColocarOperacao.Pop();
                     }
                 }
@@ -478,7 +488,7 @@ namespace apCalculadora
         private void ZerarUltimoNumeroInfixaOculta()
         {
             // Quebra as partes da infixa interna através do espaço
-            var partesInfixa = calculadora.Infixa.Split(' ');
+            var partesInfixa = calculadora.Infixa;
 
             // Ao contrário da infixa mostrada no visor, a infixa interna nunca tem mais de um elemento não separado por espaço
             // Por isso, cada parte será apenas ou operador ou número
@@ -489,7 +499,7 @@ namespace apCalculadora
                     break;
                 }
 
-            calculadora.Infixa = string.Join(" ", partesInfixa); // Junta as partes novamente na infixa interna
+            calculadora.Infixa = partesInfixa; // Junta as partes novamente na infixa interna
         }
 
         private void BtnHistorico_Click(object sender, EventArgs e)
