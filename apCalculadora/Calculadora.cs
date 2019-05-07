@@ -24,17 +24,22 @@ public class Calculadora
             Posfixa = "";
             Resultado = 0;
         }
-        public void Adicionar(string v)
+        public void Adicionar(string v) // (
         {
-            if (IsNumeric(v) && IsNumeric(Infixa[QtdElementos - 1]))
+            if (QtdElementos > 0 && (IsNumeric(v) || v == "," || v == ".") && IsNumeric(Infixa[QtdElementos - 1]))
             {
                 Infixa[QtdElementos - 1] += v;
             }
             else
             {
-                Infixa[QtdElementos++] = v;
-                if (QtdElementos == Infixa.Length)
-                    AumentarVetor();
+                if (QtdElementos > 0 && Infixa[QtdElementos - 1] == "-" && (QtdElementos == 1 || (QtdElementos > 1 && Infixa[QtdElementos - 2] == "(")))
+                    Infixa[QtdElementos - 1] += v;
+                else
+                {
+                    Infixa[QtdElementos++] = v;
+                    if (QtdElementos == Infixa.Length)
+                        AumentarVetor();
+                }
             }
         }
         private void AumentarVetor()
@@ -89,6 +94,10 @@ public class Calculadora
             if (!contas.EstaVazia())
                 contas.Topo.Infixa = value;
         }
+    }
+    public int QtdElementosUltimaConta
+    {
+        get => contas.Topo.QtdElementos;
     }
     public void ExcluirVetor()
     {
@@ -159,7 +168,7 @@ public class Calculadora
         Pilha<string> pilha = new Pilha<string>(); // Pilha de operadores
         Fila<string> pos = new Fila<string>(); // Sequência posfixa
 
-        for (int i = 0; i < infixa.Length; i++)
+        for (int i = 0; i < contas.Topo.QtdElementos; i++)
         {
             string atual = infixa[i];
 
@@ -286,7 +295,12 @@ public class Calculadora
             case "*":
                 return a * b;
             case "/":
-                return a / b;
+                if (b != 0 && a != 0)
+                    return a / b;
+                if (b == 0 && a != 0)
+                    throw new Exception("ERRO");
+                else
+                    throw new Exception("indefinido");
             case "^":
                 return Math.Pow(a, b);
             default:
