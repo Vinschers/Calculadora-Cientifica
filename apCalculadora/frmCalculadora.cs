@@ -198,7 +198,7 @@ namespace apCalculadora
                     toAdd = (sender as Button).Text;
             }
             infixaMostrada += toAdd;
-            calculadora.AdicionarAoVetor(toAdd);
+            calculadora.AdicionarAoVetor(toAdd.Trim());
             HabilitarBotoes();
             AtualizarVisor();
 
@@ -237,36 +237,41 @@ namespace apCalculadora
                 qualApagou = qualApagou[qualApagou.Length - 1].ToString();
                 string ultimoNumero = calculadora.Infixa[calculadora.QtdElementosUltimaConta - 1];
                 calculadora.Infixa[calculadora.QtdElementosUltimaConta - 1] = ultimoNumero.Substring(0, ultimoNumero.Length - 1);
+                if (ultimoNumero.Length <= 1)
+                    calculadora.ExcluirDoVetor();
             }
-
-            if (qualApagou == "√")
+            else
             {
-                operacoesAColocar.Empilhar("√");
-                quandoColocarOperacao.Empilhar(1);
 
-                calculadora.ExcluirDoVetor();
-            }
-            else if (qualApagou == "log")
-            {
-                operacoesAColocar.Empilhar("log");
-                quandoColocarOperacao.Empilhar(1);
-
-                calculadora.ExcluirDoVetor();
-            }
-
-            calculadora.ExcluirDoVetor();
-
-            if (qualApagou == "(" && !operacoesAColocar.EstaVazia())
-            {
-                quandoColocarOperacao.Empilhar(quandoColocarOperacao.Pop() - 1); // Significa que a operação está mais próxima de ser colocada
-                if (quandoColocarOperacao.Topo == 0) // Quer dizer que o parênteses que deu origem à operação - Ex: log( - foi apagado
+                if (qualApagou == "√")
                 {
-                    operacoesAColocar.Pop();
-                    quandoColocarOperacao.Pop();
+                    operacoesAColocar.Empilhar("√");
+                    quandoColocarOperacao.Empilhar(1);
+
+                    calculadora.ExcluirDoVetor();
                 }
+                else if (qualApagou == "log")
+                {
+                    operacoesAColocar.Empilhar("log");
+                    quandoColocarOperacao.Empilhar(1);
+
+                    calculadora.ExcluirDoVetor();
+                }
+
+                calculadora.ExcluirDoVetor();
+
+                if (qualApagou == "(" && !operacoesAColocar.EstaVazia())
+                {
+                    quandoColocarOperacao.Empilhar(quandoColocarOperacao.Pop() - 1); // Significa que a operação está mais próxima de ser colocada
+                    if (quandoColocarOperacao.Topo == 0) // Quer dizer que o parênteses que deu origem à operação - Ex: log( - foi apagado
+                    {
+                        operacoesAColocar.Pop();
+                        quandoColocarOperacao.Pop();
+                    }
+                }
+                else if (qualApagou == ")" && !operacoesAColocar.EstaVazia()) // Afasta a operação de poder ser colocada
+                    quandoColocarOperacao.Empilhar(quandoColocarOperacao.Pop() + 1);
             }
-            else if (qualApagou == ")" && !operacoesAColocar.EstaVazia()) // Afasta a operação de poder ser colocada
-                quandoColocarOperacao.Empilhar(quandoColocarOperacao.Pop() + 1);
             HabilitarBotoes();
             AtualizarVisor();
         }
@@ -289,8 +294,6 @@ namespace apCalculadora
                 ultimaCoisa = ultimaCoisa.Substring(ultimaCoisa.Length - 1);
             if (!ultimaCoisa.Equals("") && IsNumeric(ultimaCoisa[ultimaCoisa.Length - 1].ToString()))
             {
-                if (ultimaCoisa.Contains(","))
-                    btnDecimal.Enabled = false;
                 foreach (Control c in Controls)
                     if (c is Button)
                     {
@@ -300,6 +303,8 @@ namespace apCalculadora
                         else
                             btn.Enabled = false;
                     }
+                if (coisas[coisas.Length - 1].Contains(","))
+                    btnDecimal.Enabled = false;
             }
             else
             {

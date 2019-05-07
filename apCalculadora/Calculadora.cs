@@ -298,9 +298,9 @@ public class Calculadora
                 if (b != 0 && a != 0)
                     return a / b;
                 if (b == 0 && a != 0)
-                    throw new Exception("ERRO");
+                    throw new Exception("Erro - não é possível dividir por 0");
                 else
-                    throw new Exception("indefinido");
+                    throw new Exception("Indefinido");
             case "^":
                 return Math.Pow(a, b);
             default:
