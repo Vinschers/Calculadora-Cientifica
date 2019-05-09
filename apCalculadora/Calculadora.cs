@@ -152,8 +152,10 @@ public class Calculadora
                 }
             }
         }
-
-        result = resultados.Pop(); // Após o percurso, o único elemento restante na pilha de resultados é o próprio resultado
+        if (!resultados.EstaVazia())
+            result = resultados.Pop(); // Após o percurso, o único elemento restante na pilha de resultados é o próprio resultado
+        else
+            return 0;
         contas.Topo.Resultado = result;
         return result;
     }
@@ -164,6 +166,9 @@ public class Calculadora
     private Fila<string> CalcularPosfixa()
     {
         string[] infixa = contas.Topo.Infixa;
+
+        if (infixa[0] == null)
+            return new Fila<string>();
 
         Pilha<string> pilha = new Pilha<string>(); // Pilha de operadores
         Fila<string> pos = new Fila<string>(); // Sequência posfixa
