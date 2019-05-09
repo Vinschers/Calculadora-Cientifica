@@ -64,10 +64,6 @@
     <Compile Include="FrmHistorico.Designer.cs">
       <DependentUpon>FrmHistorico.cs</DependentUpon>
     </Compile>
-    <Compile Include="IGravarEmArquivo.cs" />
-    <Compile Include="IQueue.cs" />
-    <Compile Include="IStack.cs" />
-    <Compile Include="Lista.cs" />
     <Compile Include="Pilha.cs" />
     <Compile Include="PilhaVaziaException.cs" />
     <Compile Include="Program.cs" />

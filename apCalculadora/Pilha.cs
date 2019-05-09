@@ -1,15 +1,25 @@
 ﻿using System;
 
-public class Pilha<Dado> : IStack<Dado> where Dado : IComparable<Dado>
+public class Pilha<Dado>
 {
-    Lista<Dado> lista;
-    public Pilha()
+    public class No<X>
     {
-        lista = new Lista<Dado>();
+        public No<X> Prox { get; set; }
+        public X Info { get; set; }
+        public No(No<X> prox, X info)
+        {
+            Prox = prox;
+            Info = info;
+        }
     }
+
+    No<Dado> topo;
     public void Empilhar(Dado o)
     {
-        lista.InserirAntesDoInicio(o);
+        if (EstaVazia())
+            topo = new No<Dado>(null, o);
+        else
+            topo = new No<Dado>(topo, o);
     }
     public Dado Topo
     {
@@ -17,32 +27,19 @@ public class Pilha<Dado> : IStack<Dado> where Dado : IComparable<Dado>
         {
             if (EstaVazia())
                 throw new PilhaVaziaException("Underflow da pilha");
-            return lista.Primeiro;
-        }
-    }
-    public Dado Base
-    {
-        get
-        {
-            if (EstaVazia())
-                throw new PilhaVaziaException("Underflow da pilha");
-            return lista.Ultimo;
+            return topo.Info;
         }
     }
     public Dado Pop()
     {
         if (EstaVazia())
             throw new PilhaVaziaException("Underflow da pilha");
-        Dado o = lista.Primeiro;
-        lista.Remove(o);
+        Dado o = topo.Info;
+        topo = topo.Prox;
         return o;
-    }
-    public int Tamanho()
-    {
-        return lista.Contar;
     }
     public bool EstaVazia()
     {
-        return lista.EstaVazia;
+        return topo == null;
     }
 }

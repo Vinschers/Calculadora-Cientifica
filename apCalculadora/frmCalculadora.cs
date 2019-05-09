@@ -209,6 +209,7 @@ namespace apCalculadora
         {
             infixaMostrada = "";
             calculadora.ExcluirVetor();
+            calculadora.IniciarNovaConta();
             HabilitarBotoes();
             AtualizarVisor();
         }

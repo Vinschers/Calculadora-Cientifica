@@ -124,17 +124,49 @@ public class Calculadora
         }
         leitor.Close();
     }
+    public string[] GerarInfixaComLetras()
+    {
+        string[] ret = new string[QtdElementosUltimaConta];
+
+        char letra = 'A';
+        int repeticoes = 0;
+        for (int i = 0; i < QtdElementosUltimaConta; i++)
+            if (IsNumeric(Infixa[i]))
+            {
+                ret[i] = letra++.ToString();
+                for (int j = 0; j < repeticoes; j++)
+                    ret[i] += "'";
+                if (letra == 'Z')
+                {
+                    repeticoes++;
+                    letra = 'A';
+                }
+            }
+            else
+                ret[i] = Infixa[i];
+
+        return ret;
+    }
     public double CalcularExpressao()
     {
-        Fila<string> posfixa = CalcularPosfixa();
+        string[] infixaComLetras = GerarInfixaComLetras();
+        Fila<string> posfixa = CalcularPosfixa(infixaComLetras);
         Pilha<double> resultados = new Pilha<double>();
         double result = 0;
 
-        while (!posfixa.EstaVazia()) // Percorre a pilha da sequência posfixa, realizando as operações
+        while (!posfixa.EstaVazia()) // Percorre a fila da sequência posfixa, realizando as operações
         {
             string atual = posfixa.Retirar();
-            if (IsNumeric(atual))
-                resultados.Empilhar(double.Parse(atual));
+            if (IsLetter(atual))
+            {
+                int indice = atual[0] + 26 * (atual.Length - 1) - 'A';
+                for (int i = indice; i < QtdElementosUltimaConta; i++)
+                    if (IsNumeric(Infixa[i]))
+                    {
+                        resultados.Empilhar(double.Parse(Infixa[i]));
+                        break;
+                    }
+            }
             else
             {
                 if (IsUnary(atual))
@@ -163,10 +195,8 @@ public class Calculadora
     {
         contas.Empilhar(new Conta());
     }
-    private Fila<string> CalcularPosfixa()
+    private Fila<string> CalcularPosfixa(string[] infixa)
     {
-        string[] infixa = contas.Topo.Infixa;
-
         if (infixa[0] == null)
             return new Fila<string>();
 
@@ -177,7 +207,7 @@ public class Calculadora
         {
             string atual = infixa[i];
 
-            if (IsNumeric(atual)) // Sempre que um número é encontrado, ele é colocado na sequência
+            if (IsLetter(atual)) // Sempre que um número é encontrado, ele é colocado na sequência
                 pos.Enfileirar(atual);
             else
             {
@@ -201,26 +231,8 @@ public class Calculadora
         }
         string[] posString = pos.ToArray();
 
-        string posfixa = "";
-        char caracterAtual = 'A';
-        int repeticoes = 0;
-
-        for (int i = 0; i < posString.Length; i++) // Transforma a sequência de números em letras.
-        {
-            if (IsNumeric(posString[i]))
-            {
-                posfixa += Convert.ToChar(caracterAtual++) + "";
-                for (int rep = 0; rep < repeticoes; rep++)
-                    posfixa += "'";
-                if (caracterAtual == 91) //acabou o alfabeto
-                {
-                    repeticoes++;
-                    caracterAtual = 'A';
-                }
-            }
-            else
-                posfixa += posString[i];
-        }
+        string posfixa = String.Join("", posString);
+       
         contas.Topo.Posfixa = posfixa;
         return pos;
     }
@@ -259,6 +271,10 @@ public class Calculadora
 
         return precedencia[i, j];
     }
+    public bool IsLetter(string str)
+    {
+        return str.Length > 0 && str[0] >= 'A' && str[0] <= 'Z';
+    }
     private bool IsNumeric(string str)
     {
         return double.TryParse(str, out double n);
@@ -282,8 +298,12 @@ public class Calculadora
                 }
                 return resultado;
             case "log":
+                if (a < 0)
+                    throw new Exception("Logaritmo de número negativo!");
                 return Math.Log10(a);
             case "√":
+                if (a < 0)
+                    throw new Exception("Raiz de número negativo!");
                 return Math.Sqrt(a);
             default:
                 return 0;
