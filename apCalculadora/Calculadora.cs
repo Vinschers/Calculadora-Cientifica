@@ -24,7 +24,7 @@ public class Calculadora
             Posfixa = "";
             Resultado = 0;
         }
-        public void Adicionar(string v) // (
+        public void Adicionar(string v)
         {
             if (QtdElementos > 0 && (IsNumeric(v) || v == "," || v == ".") && IsNumeric(Infixa[QtdElementos - 1]))
             {
@@ -32,7 +32,7 @@ public class Calculadora
             }
             else
             {
-                if (QtdElementos > 0 && Infixa[QtdElementos - 1] == "-" && (QtdElementos == 1 || (QtdElementos > 1 && Infixa[QtdElementos - 2] == "(")))
+                if (QtdElementos > 0 && Infixa[QtdElementos - 1] == "-" && (QtdElementos == 1 || (QtdElementos > 1 && Infixa[QtdElementos - 2] == "(")) && IsNumeric(v))
                     Infixa[QtdElementos - 1] += v;
                 else
                 {
@@ -184,8 +184,15 @@ public class Calculadora
                 }
                 else
                 {
-                    double segundo = resultados.Pop();
-                    double primeiro = resultados.Pop();
+                    double primeiro, segundo;
+                    if (!resultados.EstaVazia())
+                        segundo = resultados.Pop();
+                    else
+                        segundo = 0;
+                    if (!resultados.EstaVazia())
+                        primeiro = resultados.Pop();
+                    else
+                        primeiro = 0;
                     double resultadoAtual = RealizarOperacaoBinaria(primeiro, segundo, atual);
                     resultados.Empilhar(resultadoAtual);
                 }
