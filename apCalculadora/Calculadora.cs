@@ -159,13 +159,20 @@ public class Calculadora
             string atual = posfixa.Retirar();
             if (IsLetter(atual))
             {
-                int indice = atual[0] + 26 * (atual.Length - 1) - 'A';
-                for (int i = indice; i < QtdElementosUltimaConta; i++)
+                int nNumero = atual[0] + 26 * (atual.Length - 1) - 'A'; //é o n-ésimo numero, comecando no 0
+                int qtdNumerosPassados = 0;
+                for (int i = 0; i < QtdElementosUltimaConta; i++)
+                {
                     if (IsNumeric(Infixa[i]))
                     {
-                        resultados.Empilhar(double.Parse(Infixa[i]));
-                        break;
+                        if (nNumero == qtdNumerosPassados)
+                        {
+                            resultados.Empilhar(double.Parse(Infixa[i]));
+                            break;
+                        }
+                        qtdNumerosPassados++;
                     }
+                }
             }
             else
             {
